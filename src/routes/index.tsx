@@ -331,7 +331,14 @@ function Checkout({ view, setView, items, setItems, onAdd, bonus }: { view: "che
         if (!response.ok) return;
         const data = await response.json();
         const status = String(data.status || data.paymentStatus || data.payment_status || data.state || "").toUpperCase();
-        if (active && (data.paid === true || ["APPROVED","PAID","COMPLETED","CONFIRMED","SUCCESS","SUCCEEDED"].includes(status))) setPaid(true);
+        if (
+  active &&
+  (data.paid === true ||
+    ["APPROVED", "PAID", "COMPLETED", "CONFIRMED", "SUCCESS", "SUCCEEDED"].includes(status))
+) {
+  setPaid(true);
+  window.location.assign("/upsell.html");
+        }
       } catch (error) { console.error("Consulta Pix:",error); }
     }
     void check();
