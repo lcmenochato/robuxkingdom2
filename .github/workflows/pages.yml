@@ -22,6 +22,11 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bunx vite build --config vite.static.config.ts
       - run: cp CNAME dist/CNAME && touch dist/.nojekyll
+      - name: Publicar página de upsell quando existir
+        run: |
+          if [ -f upsell.html ]; then
+            cp upsell.html dist/upsell.html
+          fi
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
