@@ -167,7 +167,7 @@ export function BonusWheel({ onClose, onWin }: { onClose: () => void; onWin: (va
   );
 }
 
-function Index() {
+export function Index() {
   const [items, setItems] = useState<Record<number, number>>({});
   const [bonus, setBonus] = useState(0);
   const [showWheel, setShowWheel] = useState(false);
