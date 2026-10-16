@@ -1,0 +1,45 @@
+name: Extrair site Kingdom Robux
+on:
+  push:
+    paths:
+      - '.github/workflows/extrair-site.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  extrair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Extrair ZIP para raiz
+        run: |
+          python3 - <<'PY'
+          import zipfile, pathlib
+          root = pathlib.Path('.').resolve()
+          with zipfile.ZipFile('kingdom-robux-site (1).zip') as z:
+              for entry in z.infolist():
+                  name = entry.filename
+                  if name.endswith('/'):
+                      continue
+                  parts = pathlib.PurePosixPath(name).parts
+                  if parts and parts[0] == 'site':
+                      parts = parts[1:]
+                  if not parts or '..' in parts:
+                      raise ValueError('Caminho inválido: ' + name)
+                  dest = root.joinpath(*parts).resolve()
+                  if not dest.is_relative_to(root):
+                      raise ValueError('Caminho inseguro: ' + name)
+                  dest.parent.mkdir(parents=True, exist_ok=True)
+                  dest.write_bytes(z.read(entry))
+          PY
+      - name: Salvar arquivos extraídos
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "Extrair arquivos do site Kingdom Robux"
+            git push
+          fi
