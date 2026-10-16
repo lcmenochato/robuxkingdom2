@@ -120,7 +120,7 @@ function Faq({ q, a }: { q: string; a: string }) {
   );
 }
 
-function Index() {
+export function Index() {
   const [items, setItems] = useState<Record<number, number>>({});
   const [view, setView] = useState<"home" | "checkout" | "pix">("home");
   const cart = Object.values(items).reduce((a, b) => a + b, 0);
