@@ -225,7 +225,7 @@ export function Index() {
             Venha fazer parte da nossa comunidade. O que você está esperando?
           </p>
           <div className="mx-auto mt-8 max-w-md overflow-hidden rounded-2xl border-2 border-primary">
-            <img src="/images/discord.jpg" alt="Imagem da comunidade Robux Kingdom" className="block h-auto w-full" loading="lazy" />
+            <img src="/images/discord.jpg" alt="Comunidade Robux Kingdom no Discord" className="block h-auto w-full" loading="lazy" />
           </div>
         </section>
 
