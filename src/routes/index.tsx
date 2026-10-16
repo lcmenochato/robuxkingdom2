@@ -83,11 +83,11 @@ function Logo({ big }: { big?: boolean }) {
 }
 
 const reviews: { name: string; text: string; img?: string }[] = [
-  { name: "gui_rbx", text: "Chegou certinho, olha meus robux aí! 5,7 mil na conta 🔥", img: rv17.url },
-  { name: "nyx.dark", text: "Já comprei várias vezes, 27,3 mil robux e nunca tive problema!", img: rv18.url },
-  { name: "davizinho", text: "18K na conta, entrega rapidinha. Melhor loja!", img: rv19.url },
-  { name: "mari_cute", text: "Recebi meus robux em minutos, super confiável 💛", img: rv20.url },
-  { name: "lari.rblx", text: "Caiu tudo certinho, já tô comprando roupa nova kkkk", img: rv21.url },
+  { name: "gui_rbx", text: "Chegou certinho, olha meus robux aí! 5,7 mil na conta 🔥", img: "/images/review-17.jpg" },
+  { name: "nyx.dark", text: "Já comprei várias vezes, 27,3 mil robux e nunca tive problema!", img: "/images/review-18.jpg" },
+  { name: "davizinho", text: "18K na conta, entrega rapidinha. Melhor loja!", img: "/images/review-19.jpg" },
+  { name: "mari_cute", text: "Recebi meus robux em minutos, super confiável 💛", img: "/images/review-20.jpg" },
+  { name: "lari.rblx", text: "Caiu tudo certinho, já tô comprando roupa nova kkkk", img: "/images/review-21.jpg" },
   { name: "manunana", text: "Melhorrrrr loja pqp não aguentava mais só golpe e golpe, recomendo pessoal" },
   { name: "igabriel", text: "Pedido demorou poucos minutos e meu robux caiu certinho, muito confiável!" },
   { name: "luana_rbx", text: "Preço muito bom, já comprei 3 vezes e sempre chega rápido." },
@@ -224,14 +224,8 @@ export function Index() {
           <p className="mx-auto mt-5 max-w-md text-lg text-muted-foreground">
             Venha fazer parte da nossa comunidade. O que você está esperando?
           </p>
-          <div className="mx-auto mt-8 max-w-md overflow-hidden rounded-2xl border-2 border-primary text-left">
-            <div className="h-20 bg-gold" />
-            <div className="bg-card p-5">
-              <div className="-mt-14 mb-3 h-20 w-20 overflow-hidden rounded-2xl border-4 border-card bg-background"><img src={"/images/logo.png"} alt="Robux Kingdom" className="h-full w-full object-cover" /></div>
-              <p className="flex items-center gap-2 font-display text-xl font-bold">Robux Kingdom <BadgeCheck className="h-5 w-5 text-primary" /></p>
-              <p className="mt-1 text-sm text-muted-foreground">● 2.983 online · 146.293 membros</p>
-              <p className="mt-1 text-sm text-muted-foreground">Desde ago. de 2021</p>
-            </div>
+          <div className="mx-auto mt-8 max-w-md overflow-hidden rounded-2xl border-2 border-primary">
+            <img src="/images/discord.jpg" alt="Imagem da comunidade Robux Kingdom" className="block h-auto w-full" loading="lazy" />
           </div>
         </section>
 
