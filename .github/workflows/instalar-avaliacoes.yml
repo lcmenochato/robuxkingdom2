@@ -1,0 +1,33 @@
+name: Instalar fotos das avaliações
+on:
+  push:
+    paths:
+      - 'avaliacoes-kingdom.zip'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  instalar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Extrair fotos
+        run: |
+          python3 - <<'PY'
+          import zipfile, pathlib
+          with zipfile.ZipFile('avaliacoes-kingdom.zip') as z:
+              for filename in ['review-17.jpg','review-18.jpg','review-19.jpg','review-20.jpg','review-21.jpg','discord.jpg']:
+                  pathlib.Path('public/images').mkdir(parents=True, exist_ok=True)
+                  pathlib.Path('public/images', filename).write_bytes(z.read('public/images/' + filename))
+          PY
+      - name: Salvar fotos no repositório
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/images
+          if ! git diff --cached --quiet; then
+            git commit -m "Instalar fotos das avaliações e Discord"
+            git push
+          fi
