@@ -1,0 +1,50 @@
+name: Instalar imagens Kingdom Robux
+on:
+  push:
+    paths:
+      - 'imagens-kingdom.zip'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  imagens:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Extrair imagens e corrigir caminhos
+        run: |
+          python3 - <<'PY'
+          import zipfile, pathlib, json
+          root = pathlib.Path('.').resolve()
+          with zipfile.ZipFile('imagens-kingdom.zip') as z:
+              for item in z.infolist():
+                  if item.is_dir(): continue
+                  parts = pathlib.PurePosixPath(item.filename).parts
+                  if not parts or parts[0] != 'public' or '..' in parts:
+                      raise ValueError('Caminho inválido')
+                  dest = root.joinpath(*parts).resolve()
+                  if not dest.is_relative_to(root): raise ValueError('Caminho inseguro')
+                  dest.parent.mkdir(parents=True, exist_ok=True)
+                  dest.write_bytes(z.read(item))
+          for name in ('banner','logo'):
+              p = pathlib.Path('src/assets/' + name + '.png.asset.json')
+              data = json.loads(p.read_text())
+              data['url'] = '/images/' + name + '.png'
+              p.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n')
+          for amount in (700,1200,1700,2100,3600,4500,7000,10000):
+              p = pathlib.Path('src/assets/robux-' + str(amount) + '.png.asset.json')
+              data = json.loads(p.read_text())
+              data['url'] = '/images/robux-' + str(amount) + '.jpg'
+              p.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n')
+          PY
+      - name: Commit imagens
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/images src/assets
+          if ! git diff --cached --quiet; then
+            git commit -m "Adicionar imagens reais da Kingdom Robux"
+            git push
+          fi
