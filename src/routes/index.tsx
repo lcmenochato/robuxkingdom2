@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus, Minus, Trash2, User, Lock, Check, Loader2, Menu, ShoppingCart, Search, Star, Mail, MessageCircle, Crown, BadgeCheck } from "lucide-react";
 import logoImg from "@/assets/logo.png.asset.json";
 import rv17 from "@/assets/review-17.jpg.asset.json";
@@ -234,6 +234,11 @@ export function Index() {
 type Items = Record<number, number>;
 function Checkout({ view, setView, items, setItems, onAdd }: { view: "checkout" | "pix"; setView: (v: "home" | "checkout" | "pix") => void; items: Items; setItems: (f: (i: Items) => Items) => void; onAdd: (a: number) => void }) {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [loadingPix, setLoadingPix] = useState(false);
+  const [pixError, setPixError] = useState("");
+  const [payment, setPayment] = useState<{id:string;code:string;qr:string;amount:number}|null>(null);
+  const [paid, setPaid] = useState(false);
   const [coupon, setCoupon] = useState("");
   const [discount, setDiscount] = useState(0);
   const [msg, setMsg] = useState("");
@@ -241,17 +246,66 @@ function Checkout({ view, setView, items, setItems, onAdd }: { view: "checkout" 
   const subtotal = lines.reduce((t, p) => t + p.price * (items[p.amount] ?? 0), 0);
   const total = subtotal * (1 - discount);
   const setQty = (a: number, d: number) => setItems((it) => { const n = { ...it, [a]: (it[a] || 0) + d }; if ((n[a] ?? 0) <= 0) delete n[a]; return n; });
+  const api = "https://flevopay-api.lcfferr57.workers.dev";
+  async function generatePix() {
+    if (loadingPix || !username.trim() || !lines.length) return;
+    setLoadingPix(true);
+    setPixError("");
+    try {
+      const response = await fetch(api + "/api/create-pix", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          email: email.trim(), username: username.trim(),
+          amount: Number(total.toFixed(2)),
+          product: lines.map(p => String(p.amount) + " Robux x" + String(items[p.amount])).join(", "),
+          source: "kingdom-robux-new"
+        })
+      });
+      const data = await response.json();
+      if (!response.ok || data.success === false) throw new Error(data.message || "Não foi possível gerar o Pix.");
+      const id = String(data.paymentId || data.reference || data.transactionId || "");
+      const code = String(data.copyPaste || data.pixCode || "");
+      const qr = String(data.qrcodeUrl || data.qrCodeUrl || "");
+      if (!id || (!code && !qr)) throw new Error("O servidor não retornou um Pix válido.");
+      setPayment({id, code, qr, amount:total});
+      setPaid(false);
+      setView("pix");
+      window.scrollTo(0,0);
+    } catch (error) {
+      setPixError(error instanceof Error ? error.message : "Falha ao gerar Pix.");
+    } finally { setLoadingPix(false); }
+  }
+  useEffect(() => {
+    if (view !== "pix" || !payment || paid) return;
+    let active = true;
+    async function check() {
+      try {
+        const response = await fetch(api + "/api/status-pix?paymentId=" + encodeURIComponent(payment!.id), {cache:"no-store"});
+        if (!response.ok) return;
+        const data = await response.json();
+        const status = String(data.status || data.paymentStatus || data.payment_status || data.state || "").toUpperCase();
+        if (active && (data.paid === true || ["APPROVED","PAID","COMPLETED","CONFIRMED","SUCCESS","SUCCEEDED"].includes(status))) setPaid(true);
+      } catch (error) { console.error("Consulta Pix:",error); }
+    }
+    void check();
+    const interval = window.setInterval(check, 4000);
+    return () => {active = false; window.clearInterval(interval);};
+  }, [view, payment?.id, paid]);
   const card = "rounded-3xl border border-border bg-card p-6 shadow-gold";
 
   if (view === "pix") {
-    const code = "00020126580014BR.GOV.BCB.PIX0136kingdomrobux" + Math.round(total * 100);
+    if (!payment) return <main className="mx-auto max-w-xl p-8"><p>Nenhuma cobrança gerada.</p><button onClick={() => setView("checkout")}>Voltar</button></main>;
+    const qrSource = payment.qr || (payment.code ? "https://quickchart.io/qr?size=240&margin=2&text=" + encodeURIComponent(payment.code) : "");
     return (
       <main className="mx-auto max-w-xl space-y-6 px-4 py-8">
         <div className={card + " text-center"}>
-          <h2 className="font-display text-2xl font-extrabold">Pague {brl(total)} via PIX</h2>
-          <div className="mx-auto mt-5 grid h-48 w-48 place-items-center rounded-2xl bg-foreground p-3 text-xs text-background">QR Code PIX</div>
-          <p className="mt-4 break-all rounded-xl bg-muted p-3 text-xs text-muted-foreground">{code}</p>
-          <button onClick={() => navigator.clipboard?.writeText(code)} className="mt-3 w-full rounded-full bg-gold py-3 font-bold text-primary-foreground">Copiar código PIX</button>
+          <h2 className="font-display text-2xl font-extrabold">Pague {brl(payment.amount)} via PIX</h2>
+          {qrSource && <img src={qrSource} alt="QR Code Pix" className="mx-auto mt-5 h-56 w-56 rounded-xl bg-white p-3" />}
+          {payment.code && <>
+            <p className="mt-4 break-all rounded-xl bg-muted p-3 text-xs text-muted-foreground">{payment.code}</p>
+            <button onClick={() => navigator.clipboard?.writeText(payment.code)} className="mt-3 w-full rounded-full bg-gold py-3 font-bold text-primary-foreground">Copiar código PIX</button>
+          </>}
         </div>
         <div className={card}>
           <h3 className="text-center text-lg font-bold">Como pagar:</h3>
@@ -261,13 +315,9 @@ function Checkout({ view, setView, items, setItems, onAdd }: { view: "checkout" 
             ))}
           </ol>
         </div>
-        <div className="text-center">
-          <p className="flex items-center justify-center gap-2 font-semibold"><Lock className="h-4 w-4 text-primary" /> Pagamento seguro via PIX</p>
-          <p className="text-sm text-primary">A confirmação é automática após o pagamento</p>
-        </div>
-        <div className={card}>
-          <div className="flex items-center gap-4"><Loader2 className="h-6 w-6 animate-spin text-primary" /><div><p className="text-lg text-primary">Aguardando pagamento...</p><p className="text-sm text-muted-foreground">A página será atualizada automaticamente</p></div></div>
-          <button onClick={() => alert("Obrigado! Vamos confirmar seu pagamento e enviar os Robux para " + email)} className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-success py-3 font-bold text-success-foreground"><Check className="h-5 w-5" /> JÁ FIZ O PAGAMENTO</button>
+        <div className={card + " text-center"}>
+          {paid ? <p className="font-bold text-success">Pagamento confirmado! Identificador: {payment.id}</p> :
+            <p className="flex items-center justify-center gap-3 text-primary"><Loader2 className="h-5 w-5 animate-spin" /> Aguardando confirmação do pagamento...</p>}
         </div>
       </main>
     );
@@ -279,6 +329,8 @@ function Checkout({ view, setView, items, setItems, onAdd }: { view: "checkout" 
         <h2 className="flex items-center gap-3 font-display text-2xl font-extrabold"><User className="h-6 w-6" /> Seus Dados</h2>
         <label className="mt-5 block text-muted-foreground">Email *</label>
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="seu@email.com" className="mt-2 w-full rounded-xl border border-border bg-muted px-4 py-3 outline-none focus:border-primary" />
+        <label className="mt-5 block text-muted-foreground">Usuário Roblox *</label>
+        <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Seu usuário no Roblox" className="mt-2 w-full rounded-xl border border-border bg-muted px-4 py-3 outline-none focus:border-primary" />
       </div>
       <div className={card}>
         <h2 className="flex items-center gap-3 font-display text-2xl font-extrabold"><Lock className="h-6 w-6" /> Seus Produtos ({lines.length})</h2>
@@ -305,7 +357,8 @@ function Checkout({ view, setView, items, setItems, onAdd }: { view: "checkout" 
           <button onClick={() => { const ok = coupon.trim().toUpperCase() === "ROBUXBARATO"; setDiscount(ok ? 0.1 : 0); setMsg(ok ? "Cupom aplicado: 10% OFF!" : "Cupom inválido"); }} className="rounded-xl bg-gold px-5 font-bold text-primary-foreground">Aplicar</button>
         </div>
         {msg && <p className="mt-2 text-sm text-primary">{msg}</p>}
-        <button disabled={!lines.length || !/\S+@\S+\.\S+/.test(email)} onClick={() => { setView("pix"); window.scrollTo(0, 0); }} className="mt-5 w-full rounded-full bg-gold py-4 font-display text-lg font-extrabold text-primary-foreground disabled:opacity-50">FINALIZAR COMPRA</button>
+        <button disabled={loadingPix || !lines.length || !username.trim() || !/\S+@\S+\.\S+/.test(email)} onClick={generatePix} className="mt-5 w-full rounded-full bg-gold py-4 font-display text-lg font-extrabold text-primary-foreground disabled:opacity-50">{loadingPix ? "GERANDO PIX..." : "FINALIZAR COMPRA"}</button>
+        {pixError && <p role="alert" className="mt-3 text-center text-destructive">{pixError}</p>}
         {lines.length > 0 && !/\S+@\S+\.\S+/.test(email) && <p className="mt-2 text-center text-sm text-muted-foreground">Preencha seu email para continuar</p>}
       </div>
       <section className="pt-6">
