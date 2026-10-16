@@ -83,11 +83,11 @@ function Logo({ big }: { big?: boolean }) {
 }
 
 const reviews: { name: string; text: string; img?: string }[] = [
-  { name: "gui_rbx", text: "Chegou certinho, olha meus robux aí! 5,7 mil na conta 🔥", img: "/images/review-17.jpg" },
-  { name: "nyx.dark", text: "Já comprei várias vezes, 27,3 mil robux e nunca tive problema!", img: "/images/review-18.jpg" },
-  { name: "davizinho", text: "18K na conta, entrega rapidinha. Melhor loja!", img: "/images/review-19.jpg" },
-  { name: "mari_cute", text: "Recebi meus robux em minutos, super confiável 💛", img: "/images/review-20.jpg" },
-  { name: "lari.rblx", text: "Caiu tudo certinho, já tô comprando roupa nova kkkk", img: "/images/review-21.jpg" },
+  { name: "gui_rbx", text: "Chegou certinho, olha meus robux aí! 5,7 mil na conta 🔥", img: "/images/review-17.jpg?v=20261016b" },
+  { name: "nyx.dark", text: "Já comprei várias vezes, 27,3 mil robux e nunca tive problema!", img: "/images/review-18.jpg?v=20261016b" },
+  { name: "davizinho", text: "18K na conta, entrega rapidinha. Melhor loja!", img: "/images/review-19.jpg?v=20261016b" },
+  { name: "mari_cute", text: "Recebi meus robux em minutos, super confiável 💛", img: "/images/review-20.jpg?v=20261016b" },
+  { name: "lari.rblx", text: "Caiu tudo certinho, já tô comprando roupa nova kkkk", img: "/images/review-21.jpg?v=20261016b" },
   { name: "manunana", text: "Melhorrrrr loja pqp não aguentava mais só golpe e golpe, recomendo pessoal" },
   { name: "igabriel", text: "Pedido demorou poucos minutos e meu robux caiu certinho, muito confiável!" },
   { name: "luana_rbx", text: "Preço muito bom, já comprei 3 vezes e sempre chega rápido." },
@@ -225,7 +225,7 @@ export function Index() {
             Venha fazer parte da nossa comunidade. O que você está esperando?
           </p>
           <div className="mx-auto mt-8 max-w-md overflow-hidden rounded-2xl border-2 border-primary">
-            <img src="/images/discord.jpg" alt="Comunidade Robux Kingdom no Discord" className="block h-auto w-full" loading="lazy" />
+            <img src="/images/discord.jpg?v=20261016b" alt="Comunidade Robux Kingdom no Discord" className="block h-auto w-full" loading="lazy" />
           </div>
         </section>
 
