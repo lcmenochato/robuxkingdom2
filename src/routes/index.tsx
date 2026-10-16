@@ -32,14 +32,14 @@ export const Route = createFileRoute("/")({
 });
 
 const products = [
-  { amount: 700, price: 0, old: 0, img: img700.url, soldOut: true },
-  { amount: 1200, price: 19.9, old: 24, img: img1200.url },
-  { amount: 1700, price: 24.9, old: 32, img: img1700.url },
-  { amount: 2100, price: 29.9, old: 39, img: img2100.url },
-  { amount: 3600, price: 44.9, old: 59, img: img3600.url },
-  { amount: 4500, price: 59.9, old: 79, img: img4500.url },
-  { amount: 7000, price: 89.9, old: 119, img: img7000.url },
-  { amount: 10000, price: 119.9, old: 159, img: img10000.url },
+  { amount: 700, price: 0, old: 0, img: "/images/robux-700.jpg", soldOut: true },
+  { amount: 1200, price: 19.9, old: 24, img: "/images/robux-1200.jpg" },
+  { amount: 1700, price: 24.9, old: 32, img: "/images/robux-1700.jpg" },
+  { amount: 2100, price: 29.9, old: 39, img: "/images/robux-2100.jpg" },
+  { amount: 3600, price: 44.9, old: 59, img: "/images/robux-3600.jpg" },
+  { amount: 4500, price: 59.9, old: 79, img: "/images/robux-4500.jpg" },
+  { amount: 7000, price: 89.9, old: 119, img: "/images/robux-7000.jpg" },
+  { amount: 10000, price: 119.9, old: 159, img: "/images/robux-10000.jpg" },
 ];
 const brl = (n: number) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
@@ -79,7 +79,7 @@ function ProductCard({ p, onAdd }: { p: (typeof products)[0]; onAdd: () => void 
 }
 
 function Logo({ big }: { big?: boolean }) {
-  return <img src={logoImg.url} alt="Robux Kingdom" className={big ? "w-72 max-w-full" : "h-14 w-auto"} />;
+  return <img src={"/images/logo.png"} alt="Robux Kingdom" className={big ? "w-72 max-w-full" : "h-14 w-auto"} />;
 }
 
 const reviews: { name: string; text: string; img?: string }[] = [
@@ -155,7 +155,7 @@ export function Index() {
       {view !== "home" ? (
         <Checkout view={view} setView={setView} items={items} setItems={setItems} onAdd={add} />
       ) : (<>
-      <img src={banner.url} alt="Cansado de pagar caro em Robux? Aqui temos os melhores preços!" className="mx-auto w-full max-w-6xl" />
+      <img src={"/images/banner.png"} alt="Cansado de pagar caro em Robux? Aqui temos os melhores preços!" className="mx-auto w-full max-w-6xl" />
 
       <main className="mx-auto max-w-6xl px-4 py-12">
         <h2 className="font-display text-4xl font-extrabold text-gold-grad">Promoções</h2>
@@ -176,7 +176,7 @@ export function Index() {
           <div className="mx-auto mt-8 max-w-md overflow-hidden rounded-2xl border-2 border-primary text-left">
             <div className="h-20 bg-gold" />
             <div className="bg-card p-5">
-              <div className="-mt-14 mb-3 h-20 w-20 overflow-hidden rounded-2xl border-4 border-card bg-background"><img src={logoImg.url} alt="Robux Kingdom" className="h-full w-full object-cover" /></div>
+              <div className="-mt-14 mb-3 h-20 w-20 overflow-hidden rounded-2xl border-4 border-card bg-background"><img src={"/images/logo.png"} alt="Robux Kingdom" className="h-full w-full object-cover" /></div>
               <p className="flex items-center gap-2 font-display text-xl font-bold">Robux Kingdom <BadgeCheck className="h-5 w-5 text-primary" /></p>
               <p className="mt-1 text-sm text-muted-foreground">● 2.983 online · 146.293 membros</p>
               <p className="mt-1 text-sm text-muted-foreground">Desde ago. de 2021</p>
