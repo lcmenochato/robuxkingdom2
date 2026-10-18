@@ -4,6 +4,7 @@ on:
     paths:
       - 'imagens-kingdom.zip'
       - 'imagens-kingdom-novas.zip'
+      - '.github/workflows/instalar-imagens.yml'
   workflow_dispatch:
 permissions:
   contents: write
