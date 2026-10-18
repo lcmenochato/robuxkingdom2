@@ -120,61 +120,11 @@ function Faq({ q, a }: { q: string; a: string }) {
   );
 }
 
-export function BonusWheel({ onClose, onWin }: { onClose: () => void; onWin: (value: number) => void }) {
-  const [stage, setStage] = useState<"offer" | "wheel" | "result">("offer");
-  const [spinning, setSpinning] = useState(false);
-  const [rotation, setRotation] = useState(0);
-  const [prize, setPrize] = useState(0);
-  const values = [50, 100, 200, 275];
-  function spin() {
-    if (spinning) return;
-    setSpinning(true);
-    const random = new Uint32Array(1);
-    crypto.getRandomValues(random);
-    const index = random[0] % 4;
-    const angle = (360 - (index * 90 + 45)) % 360;
-    setRotation(1800 + angle);
-    window.setTimeout(() => { setPrize(values[index]); setStage("result"); setSpinning(false); }, 4600);
-  }
-  return (
-    <div role="dialog" aria-modal="true" aria-label="Roleta de bônus" className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4">
-      <div className="relative w-full max-w-md rounded-2xl border border-yellow-600/70 bg-[#090909] p-6 text-center text-white shadow-2xl">
-        <button onClick={onClose} aria-label="Fechar" className="absolute right-4 top-3 text-3xl text-zinc-300">×</button>
-        <img src="/images/logo.png" alt="Kingdom Robux" className="mx-auto mb-6 h-20 max-w-[210px] object-contain" />
-        {stage === "offer" ? <>
-          <h2 className="text-2xl font-extrabold text-yellow-400">Roleta de bônus</h2>
-          <p className="my-7 text-lg text-zinc-300">Você desbloqueou uma chance na roleta! Quer girar agora e ganhar Robux extra grátis na compra?</p>
-          <button onClick={() => setStage("wheel")} className="w-full rounded-xl bg-yellow-500 p-4 text-lg font-extrabold text-black">Quero girar a roleta</button>
-          <button onClick={onClose} className="mt-3 w-full rounded-xl border border-zinc-700 p-3 text-lg">Agora não</button>
-        </> : stage === "wheel" ? <>
-          <h2 className="text-2xl font-extrabold text-yellow-400">Gire e ganhe Robux grátis</h2>
-          <p className="my-5 text-zinc-300">4 prêmios: 50, 100, 200 ou 275 Robux — bônus no carrinho.</p>
-          <div className="relative mx-auto my-7 aspect-square w-full max-w-[330px]">
-            <div className="absolute left-1/2 top-[-12px] z-10 -translate-x-1/2 text-4xl text-yellow-500">▼</div>
-            <div className="h-full w-full rounded-full border-[7px] border-yellow-600 shadow-[0_0_35px_rgba(255,200,0,.2)]" style={{background:"conic-gradient(#20c45d 0deg 90deg,#eab308 90deg 180deg,#3b82f6 180deg 270deg,#a855f7 270deg 360deg)",transform:`rotate(${rotation}deg)`,transition:spinning?"transform 4.5s cubic-bezier(.12,.75,.13,1)":"none"}}>
-              {values.map((v,i) => <span key={v} className="absolute left-1/2 top-1/2 text-center text-sm font-extrabold text-white drop-shadow-lg" style={{transform:`translate(-50%,-50%) rotate(${i*90+45}deg) translateY(-103px) rotate(0deg)`}}>BÔNUS<br/><strong className="text-2xl">{v}</strong><br/>Robux</span>)}
-            </div>
-            <div className="absolute left-1/2 top-1/2 grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-4 border-yellow-600 bg-black text-3xl text-yellow-400">✦</div>
-          </div>
-          <button disabled={spinning} onClick={spin} className="w-full rounded-xl bg-yellow-500 p-4 text-lg font-extrabold text-black disabled:opacity-60">{spinning?"Girando...":"Girar roleta"}</button>
-        </> : <>
-          <h2 className="text-2xl font-extrabold text-yellow-400">Parabéns! 🎉</h2>
-          <p className="my-7 text-xl">Você ganhou <strong className="text-yellow-400">{prize} Robux de bônus!</strong></p>
-          <button onClick={() => onWin(prize)} className="w-full rounded-xl bg-yellow-500 p-4 text-lg font-extrabold text-black">Adicionar bônus ao carrinho</button>
-        </>}
-      </div>
-    </div>
-  );
-}
-
 export function Index() {
   const [items, setItems] = useState<Record<number, number>>({});
-  const [bonus, setBonus] = useState(0);
-  const [showWheel, setShowWheel] = useState(false);
-  const [wheelUsed, setWheelUsed] = useState(false);
   const [view, setView] = useState<"home" | "checkout" | "pix">("home");
   const cart = Object.values(items).reduce((a, b) => a + b, 0);
-  const add = (amount: number) => { setItems((it) => ({ ...it, [amount]: (it[amount] || 0) + 1 })); setView("checkout"); if (!wheelUsed) setShowWheel(true); window.scrollTo(0, 0); };
+  const add = (amount: number) => { setItems((it) => ({ ...it, [amount]: (it[amount] || 0) + 1 })); setView("checkout"); window.scrollTo(0, 0); };
   const [q, setQ] = useState("");
   const list = products.filter((p) => `${p.amount} robux`.includes(q.toLowerCase().replace(/\./g, "")));
   const marquee = "👑 KINGDOM ROBUX   ROBUXBARATO   10% OFF NA SUA PRIMEIRA COMPRA!   ";
@@ -202,9 +152,8 @@ export function Index() {
         </div>
       </header>
 
-      {showWheel && <BonusWheel onClose={() => {setShowWheel(false);setWheelUsed(true);}} onWin={(value) => {setBonus(value);setShowWheel(false);setWheelUsed(true);}} />}
       {view !== "home" ? (
-        <Checkout view={view} setView={setView} items={items} setItems={setItems} onAdd={add} bonus={bonus} />
+        <Checkout view={view} setView={setView} items={items} setItems={setItems} onAdd={add} />
       ) : (<>
       <img src={"/images/banner.png"} alt="Cansado de pagar caro em Robux? Aqui temos os melhores preços!" className="mx-auto w-full max-w-6xl" />
 
@@ -277,7 +226,7 @@ export function Index() {
 }
 
 type Items = Record<number, number>;
-function Checkout({ view, setView, items, setItems, onAdd, bonus }: { view: "checkout" | "pix"; setView: (v: "home" | "checkout" | "pix") => void; items: Items; setItems: (f: (i: Items) => Items) => void; onAdd: (a: number) => void; bonus: number }) {
+function Checkout({ view, setView, items, setItems, onAdd }: { view: "checkout" | "pix"; setView: (v: "home" | "checkout" | "pix") => void; items: Items; setItems: (f: (i: Items) => Items) => void; onAdd: (a: number) => void }) {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [loadingPix, setLoadingPix] = useState(false);
@@ -304,7 +253,7 @@ function Checkout({ view, setView, items, setItems, onAdd, bonus }: { view: "che
           email: email.trim(), username: username.trim(),
           amount: Number(total.toFixed(2)),
           product: lines.map(p => String(p.amount) + " Robux x" + String(items[p.amount])).join(", "),
-          bonusRobux: bonus,
+          bonusRobux: 0,
           source: "kingdom-robux-new"
         })
       });
@@ -412,7 +361,6 @@ function Checkout({ view, setView, items, setItems, onAdd, bonus }: { view: "che
       </div>
       <div className={card}>
         <h2 className="font-display text-2xl font-extrabold">Resumo do Pedido</h2>
-        {bonus > 0 && <div className="mt-4 rounded-xl border border-yellow-500/50 bg-yellow-500/10 p-4 text-center font-bold text-yellow-400">🎁 Bônus da roleta: +{bonus} Robux grátis</div>}
         <div className="mt-5 flex justify-between text-muted-foreground"><span>Subtotal:</span><span className="text-primary">{brl(subtotal)}</span></div>
         {discount > 0 && <div className="mt-2 flex justify-between text-muted-foreground"><span>Cupom (10%):</span><span>-{brl(subtotal * discount)}</span></div>}
         <div className="my-4 h-px bg-border" />
