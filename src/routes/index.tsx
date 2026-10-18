@@ -347,6 +347,7 @@ function Checkout({ view, setView, items, setItems, onAdd }: { view: "checkout" 
       </div>
       <div className={card}>
         <h2 className="flex items-center gap-3 font-display text-2xl font-extrabold"><Lock className="h-6 w-6" /> Seus Produtos ({lines.length})</h2>
+        <div className="mt-4 flex justify-center"><span className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 px-5 py-2 text-center font-display text-sm font-black uppercase tracking-wide text-zinc-950 shadow-lg shadow-amber-500/20">✦ ENTREGA AUTOMÁTICA ✦</span></div>
         {lines.length === 0 && <p className="mt-4 text-muted-foreground">Seu carrinho está vazio.</p>}
         {lines.map((p) => (
           <div key={p.amount} className="mt-4 flex items-center gap-3 rounded-2xl border border-border bg-muted p-3">
