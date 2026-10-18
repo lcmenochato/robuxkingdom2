@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'imagens-kingdom.zip'
+      - 'imagens-kingdom-novas.zip'
   workflow_dispatch:
 permissions:
   contents: write
@@ -18,7 +19,7 @@ jobs:
           python3 - <<'PY'
           import zipfile, pathlib, json
           root = pathlib.Path('.').resolve()
-          with zipfile.ZipFile('imagens-kingdom.zip') as z:
+          with zipfile.ZipFile('imagens-kingdom-novas.zip') as z:
               for item in z.infolist():
                   if item.is_dir(): continue
                   parts = pathlib.PurePosixPath(item.filename).parts
