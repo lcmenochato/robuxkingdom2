@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Plus, Minus, Trash2, User, Lock, Check, Loader2, Menu, ShoppingCart, Search, Star, Mail, MessageCircle, Crown, BadgeCheck } from "lucide-react";
 import logoImg from "@/assets/logo.png.asset.json";
 import rv17 from "@/assets/review-17.jpg.asset.json";
@@ -127,6 +127,19 @@ export function Index() {
   const add = (amount: number) => { setItems((it) => ({ ...it, [amount]: (it[amount] || 0) + 1 })); setView("checkout"); window.scrollTo(0, 0); };
   const [q, setQ] = useState("");
   const list = products.filter((p) => `${p.amount} robux`.includes(q.toLowerCase().replace(/\./g, "")));
+  const productScrollRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = productScrollRef.current;
+    if (!el || list.length === 0) return;
+    el.scrollLeft = el.scrollWidth / 3;
+  }, [q, view]);
+  const loopProductScroll = () => {
+    const el = productScrollRef.current;
+    if (!el || list.length === 0) return;
+    const third = el.scrollWidth / 3;
+    if (el.scrollLeft < third * 0.5) el.scrollLeft += third;
+    else if (el.scrollLeft > third * 1.5) el.scrollLeft -= third;
+  };
   const marquee = "👑 KINGDOM ROBUX   ROBUXBARATO   10% OFF NA SUA PRIMEIRA COMPRA!   ";
 
   return (
@@ -160,8 +173,8 @@ export function Index() {
       <main className="mx-auto max-w-6xl px-4 py-12">
         <h2 className="font-display text-4xl font-extrabold text-gold-grad">Promoções</h2>
         <div className="mt-2 h-1 w-48 rounded-full bg-gold" />
-        <div className="-mx-4 mt-8 flex snap-x gap-5 overflow-x-auto px-4 pb-4">
-          {list.map((p) => <ProductCard key={p.amount} p={p} onAdd={() => add(p.amount)} />)}
+        <div ref={productScrollRef} onScroll={loopProductScroll} className="-mx-4 mt-8 flex snap-x gap-5 overflow-x-auto px-4 pb-4">
+          {(list.length ? [0, 1, 2].flatMap((copy) => list.map((p) => ({ p, copy }))) : []).map(({ p, copy }) => <ProductCard key={`${copy}-${p.amount}`} p={p} onAdd={() => add(p.amount)} />)}
           {list.length === 0 && <p className="text-muted-foreground">Nenhum produto encontrado.</p>}
         </div>
 
