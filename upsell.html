@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taxa de Liberação - Upsell</title>
+    <title>Oferta adicional de Robux</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * {
@@ -319,16 +319,16 @@
     <div class="container">
         <!-- Top Bar com Contador -->
         <div class="timer-bar">
-            <div class="timer-title">Tempo para liberar seus Robux</div>
+            <div class="timer-title">Oferta adicional de Robux</div>
             <div class="timer-clock" id="timer">09:52</div>
         </div>
 
         <div class="content">
             <!-- Título Principal -->
-            <h1 class="main-title">Taxa Obrigatória Antifraude</h1>
+            <h1 class="main-title">Oferta adicional opcional</h1>
             
             <p class="description">
-                Para liberar os Robux adquiridos na sua conta, é <highlight>OBRIGATÓRIO</highlight> pagar uma taxa antifraude única de <span class="price-tag">R$ 14,90</span>. Este valor é totalmente reembolsável e será devolvido após a liberação.
+                Você pode adquirir uma oferta adicional por <span class="price-tag">R$ 14,90</span>. Esta compra é opcional e não interfere na entrega do pedido original.
             </p>
 
             <!-- Card de Checkout / Upsell -->
@@ -340,8 +340,8 @@
                         </svg>
                     </div>
                     <div class="card-header-text">
-                        <div class="card-title">Taxa de Liberação dos Robux</div>
-                        <div class="badge">100% Reembolsável</div>
+                        <div class="card-title">Oferta adicional de Robux</div>
+                        <div class="badge">Compra opcional</div>
                     </div>
                 </div>
 
@@ -352,7 +352,7 @@
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
                         </div>
-                        Proteção contra fraude e chargeback
+                        Oferta separada do pedido original
                     </div>
                     <div class="check-item">
                         <div class="check-icon">
@@ -360,7 +360,7 @@
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
                         </div>
-                        Entrega garantida dos Robux
+                        Seu pedido original continua independente
                     </div>
                     <div class="check-item">
                         <div class="check-icon">
@@ -368,7 +368,7 @@
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
                         </div>
-                        Valor devolvido após liberação
+                        Confira as condições antes de pagar
                     </div>
                     <div class="check-item">
                         <div class="check-icon">
@@ -382,7 +382,7 @@
 
                 <div class="price-section">
                     <div class="main-price">R$ 14,90</div>
-                    <div class="price-subtext">Valor reembolsável após liberação dos Robux</div>
+                    <div class="price-subtext">Pagamento opcional, separado da compra original</div>
                 </div>
             </div>
 
@@ -399,7 +399,7 @@
                 <div class="warning-text-container">
                     <div class="warning-title">ATENÇÃO</div>
                     <div class="warning-desc">
-                        Se você <strong>NÃO pagar</strong> esta taxa antifraude, seus Robux <strong>NÃO serão liberados!</strong> O pagamento é <strong>OBRIGATÓRIO</strong> para processar a liberação na sua conta.
+                        Esta oferta é opcional. Você não precisa fazer outro pagamento para receber os produtos já comprados.
                     </div>
                 </div>
             </div>
@@ -409,7 +409,7 @@
                 <svg viewBox="0 0 24 24">
                     <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
                 </svg>
-                <span>Pagamento 100% seguro via PIX — robuxempire.shop</span>
+                <span>Pagamento via PIX — Kingdom Robux</span>
             </div>
         </div>
     </div>
@@ -469,6 +469,42 @@
 
   function money(v) {
     return "R$ " + Number(v).toFixed(2).replace(".", ",");
+  }
+
+  let statusTimer = null;
+  function watchUpsellPayment(data) {
+    const id = data.paymentId || data.reference || data.transactionId || data.id || data.data?.paymentId || data.data?.reference;
+    if (statusTimer) clearInterval(statusTimer);
+    if (!id) {
+      const el = document.getElementById("upsellPixStatus");
+      if (el) el.textContent = "PIX gerado. Confira a confirmação no seu banco.";
+      return;
+    }
+    let busy = false;
+    let attempts = 0;
+    statusTimer = setInterval(async () => {
+      if (busy) return;
+      busy = true;
+      try {
+        const response = await fetch("https://flevopay-api.lcfferr57.workers.dev/api/status-pix?paymentId=" + encodeURIComponent(String(id)), { cache: "no-store" });
+        if (!response.ok) return;
+        const result = await response.json();
+        const status = String(result.status || result.paymentStatus || result.payment_status || result.state || "").toUpperCase();
+        const el = document.getElementById("upsellPixStatus");
+        if (result.paid === true || ["APPROVED","PAID","COMPLETED","CONFIRMED","SUCCESS","SUCCEEDED"].includes(status)) {
+          clearInterval(statusTimer);
+          if (el) el.textContent = "✓ Pagamento confirmado!";
+        } else if (["FAILED","CANCELED","CANCELLED","EXPIRED","REFUNDED"].includes(status)) {
+          clearInterval(statusTimer);
+          if (el) el.textContent = "Pagamento não concluído. Entre em contato com o suporte.";
+        }
+      } catch (error) { console.error("Consulta do PIX adicional:", error); }
+      finally {
+        busy = false;
+        attempts++;
+        if (attempts >= 150) clearInterval(statusTimer);
+      }
+    }, 4000);
   }
 
   function showPix(data) {
@@ -532,8 +568,8 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           amount: PRICE,
-          product: "Taxa Antifraude - Liberação de Robux",
-          description: "Taxa Antifraude - Liberação de Robux",
+          product: "Oferta adicional opcional de Robux",
+          description: "Oferta adicional opcional de Robux",
           source: "kingdom-robux-upsell",
           externalReference: "UPSELL-" + (purchase.paymentId || purchase.orderId || "TESTE") + "-" + Date.now() + "-" + Math.random().toString(16).slice(2),
           originalOrderId: purchase.paymentId || purchase.orderId || "",
@@ -552,6 +588,7 @@
       if (!hasPix) throw new Error("A API não retornou os dados do PIX.");
 
       showPix(data);
+      watchUpsellPayment(data);
     } catch (err) {
       alert(err.message || "Erro ao gerar o PIX.");
     } finally {
