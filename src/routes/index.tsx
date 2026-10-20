@@ -124,6 +124,12 @@ function Faq({ q, a }: { q: string; a: string }) {
 export function Index() {
   const [items, setItems] = useState<Record<number, number>>({});
   const [view, setView] = useState<"home" | "checkout" | "pix">("home");
+  const [bonusRobux, setBonusRobux] = useState<number>(() => Number(sessionStorage.getItem("kr-bonus-robux") || 0));
+  useEffect(() => {
+    const onBonus = (event: Event) => setBonusRobux(Number((event as CustomEvent<number>).detail) || 0);
+    window.addEventListener("kr-bonus-won", onBonus);
+    return () => window.removeEventListener("kr-bonus-won", onBonus);
+  }, []);
   const cart = Object.values(items).reduce((a, b) => a + b, 0);
   const add = (amount: number) => { setItems((it) => ({ ...it, [amount]: (it[amount] || 0) + 1 })); setView("checkout"); window.scrollTo(0, 0); window.dispatchEvent(new Event("kr-open-bonus-wheel")); };
   const [q, setQ] = useState("");
@@ -195,7 +201,7 @@ export function Index() {
       </header>
 
       {view !== "home" ? (
-        <Checkout view={view} setView={setView} items={items} setItems={setItems} onAdd={add} />
+        <Checkout view={view} setView={setView} items={items} setItems={setItems} onAdd={add} bonusRobux={bonusRobux} />
       ) : (<>
       <img src={"/images/banner.png"} alt="Cansado de pagar caro em Robux? Aqui temos os melhores preços!" className="mx-auto w-full max-w-6xl" />
 
@@ -268,7 +274,7 @@ export function Index() {
 }
 
 type Items = Record<number, number>;
-function Checkout({ view, setView, items, setItems, onAdd }: { view: "checkout" | "pix"; setView: (v: "home" | "checkout" | "pix") => void; items: Items; setItems: (f: (i: Items) => Items) => void; onAdd: (a: number) => void }) {
+function Checkout({ view, setView, items, setItems, onAdd, bonusRobux }: { view: "checkout" | "pix"; setView: (v: "home" | "checkout" | "pix") => void; items: Items; setItems: (f: (i: Items) => Items) => void; onAdd: (a: number) => void; bonusRobux: number }) {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [loadingPix, setLoadingPix] = useState(false);
@@ -295,7 +301,7 @@ function Checkout({ view, setView, items, setItems, onAdd }: { view: "checkout" 
           email: email.trim(), username: username.trim(),
           amount: Number(total.toFixed(2)),
           product: lines.map(p => String(p.amount) + " Robux x" + String(items[p.amount])).join(", "),
-          bonusRobux: 0,
+          bonusRobux: lines.length ? bonusRobux : 0,
           source: "kingdom-robux-new"
         })
       });
@@ -390,7 +396,7 @@ function Checkout({ view, setView, items, setItems, onAdd }: { view: "checkout" 
         <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Seu usuário no Roblox" className="mt-2 w-full rounded-xl border border-border bg-muted px-4 py-3 outline-none focus:border-primary" />
       </div>
       <div className={card}>
-        <h2 className="flex items-center gap-3 font-display text-2xl font-extrabold"><Lock className="h-6 w-6" /> Seus Produtos ({lines.length})</h2>
+        <h2 className="flex items-center gap-3 font-display text-2xl font-extrabold"><Lock className="h-6 w-6" /> Seus Produtos ({lines.length + (lines.length > 0 && bonusRobux > 0 ? 1 : 0)})</h2>
         <div className="mt-4 flex justify-center"><span className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 px-5 py-2 text-center font-display text-sm font-black uppercase tracking-wide text-zinc-950 shadow-lg shadow-amber-500/20">✦ ENTREGA AUTOMÁTICA ✦</span></div>
         {lines.length === 0 && <p className="mt-4 text-muted-foreground">Seu carrinho está vazio.</p>}
         {lines.map((p) => (
@@ -403,6 +409,13 @@ function Checkout({ view, setView, items, setItems, onAdd }: { view: "checkout" 
             <button aria-label="Remover" onClick={() => setQty(p.amount, -(items[p.amount] ?? 0))} className="grid h-8 w-8 place-items-center rounded-full bg-background"><Trash2 className="h-4 w-4" /></button>
           </div>
         ))}
+        {lines.length > 0 && bonusRobux > 0 && (
+          <div className="mt-4 flex items-center gap-3 rounded-2xl border border-yellow-500/50 bg-yellow-400/10 p-3">
+            <span className="grid h-16 w-12 shrink-0 place-items-center rounded-lg bg-yellow-400/20 text-2xl">🎁</span>
+            <div className="flex-1"><p className="font-bold">+{bonusRobux.toLocaleString("pt-BR")} ROBUX</p><p className="text-sm text-yellow-300">Bônus da roleta</p></div>
+            <span className="font-bold text-yellow-300">GRÁTIS</span>
+          </div>
+        )}
       </div>
       <div className={card}>
         <h2 className="font-display text-2xl font-extrabold">Resumo do Pedido</h2>
