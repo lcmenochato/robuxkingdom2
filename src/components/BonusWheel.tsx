@@ -8,8 +8,11 @@ export function BonusWheel() {
   const [prize, setPrize] = useState<number | null>(null);
   useEffect(() => {
     if (!sessionStorage.getItem("kr-wheel-seen")) {
-      setOpen(true);
-      sessionStorage.setItem("kr-wheel-seen", "1");
+      const timer = window.setTimeout(() => {
+        setOpen(true);
+        sessionStorage.setItem("kr-wheel-seen", "1");
+      }, 5000);
+      return () => window.clearTimeout(timer);
     }
   }, []);
   const spin = () => {
