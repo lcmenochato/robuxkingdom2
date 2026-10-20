@@ -28,7 +28,7 @@ export function BonusWheel() {
       {open && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4" role="dialog" aria-modal="true" aria-label="Roleta de bônus">
         <div className="relative w-full max-w-md rounded-3xl border-2 border-yellow-400 bg-zinc-950 p-6 text-center text-white shadow-2xl">
           <button type="button" aria-label="Fechar" onClick={() => setOpen(false)} className="absolute right-4 top-3 text-3xl text-white">×</button>
-          <h2 className="mb-2 text-3xl font-black text-yellow-300">🎁 ROLETA DE BÔNUS</h2>
+          <img src="https://i.postimg.cc/NfHHgfgd/1792169901114.png" alt="Roleta de bônus Kingdom Robux" className="mx-auto mb-2 h-auto w-full max-w-[300px] object-contain" />
           <p className="mb-4 text-sm text-zinc-200">Gire e descubra seu bônus de Robux!</p>
           <div className="relative mx-auto my-5 h-64 w-64 max-w-full">
             <div className="absolute left-1/2 top-[-10px] z-10 -translate-x-1/2 text-3xl text-yellow-300">▼</div>
