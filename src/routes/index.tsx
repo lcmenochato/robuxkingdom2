@@ -125,7 +125,7 @@ export function Index() {
   const [items, setItems] = useState<Record<number, number>>({});
   const [view, setView] = useState<"home" | "checkout" | "pix">("home");
   const cart = Object.values(items).reduce((a, b) => a + b, 0);
-  const add = (amount: number) => { setItems((it) => ({ ...it, [amount]: (it[amount] || 0) + 1 })); setView("checkout"); window.scrollTo(0, 0); };
+  const add = (amount: number) => { setItems((it) => ({ ...it, [amount]: (it[amount] || 0) + 1 })); setView("checkout"); window.scrollTo(0, 0); window.dispatchEvent(new Event("kr-open-bonus-wheel")); };
   const [q, setQ] = useState("");
   const list = products.filter((p) => `${p.amount} robux`.includes(q.toLowerCase().replace(/\./g, "")));
   const productScrollRef = useRef<HTMLDivElement>(null);
