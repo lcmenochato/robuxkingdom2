@@ -1,3 +1,4 @@
+import { BonusWheel } from "../components/BonusWheel";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Plus, Minus, Trash2, User, Lock, Check, Loader2, Menu, ShoppingCart, Search, Star, Mail, MessageCircle, Crown, BadgeCheck } from "lucide-react";
@@ -144,6 +145,7 @@ export function Index() {
 
   return (
     <div className="min-h-screen bg-kingdom font-sans">
+      <BonusWheel />
       <div className="overflow-hidden bg-gold py-2 text-primary-foreground">
         <div className="flex w-max animate-marquee whitespace-pre font-display text-sm font-extrabold">
           {marquee.repeat(6)}
