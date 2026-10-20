@@ -302,13 +302,15 @@ function Checkout({ view, setView, items, setItems, onAdd }: { view: "checkout" 
 ) {
   setPaid(true);
   try {
-    window.sessionStorage.setItem("kingdom_original_purchase", JSON.stringify({
+    const originalPurchase = JSON.stringify({
       paymentId: payment!.id,
       email: email.trim(),
       username: username.trim(),
       name: username.trim(),
       amount: payment!.amount
-    }));
+    });
+    window.sessionStorage.setItem("kingdom_original_purchase", originalPurchase);
+    window.localStorage.setItem("kingdom_original_purchase", originalPurchase);
   } catch (storageError) {
     console.error("Não foi possível salvar os dados do pedido para o upsell:", storageError);
   }
