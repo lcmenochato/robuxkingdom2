@@ -147,7 +147,7 @@ export function Index() {
     el.addEventListener("wheel", pause, { passive: true });
     const animate = (now: number) => {
       if (previous && now - previous < 150 && now > pausedUntil && !document.hidden) {
-        el.scrollLeft += (now - previous) * 0.025;
+        el.scrollLeft += (now - previous) * 0.045;
       }
       previous = now;
       frame = requestAnimationFrame(animate);
@@ -202,7 +202,7 @@ export function Index() {
       <main className="mx-auto max-w-6xl px-4 py-12">
         <h2 className="font-display text-4xl font-extrabold text-gold-grad">Promoções</h2>
         <div className="mt-2 h-1 w-48 rounded-full bg-gold" />
-        <div ref={productScrollRef} onScroll={loopProductScroll} className="-mx-4 mt-8 flex snap-x gap-5 overflow-x-auto px-4 pb-4">
+        <div ref={productScrollRef} onScroll={loopProductScroll} className="-mx-4 mt-8 flex gap-5 overflow-x-auto px-4 pb-4">
           {(list.length ? [0, 1, 2].flatMap((copy) => list.map((p) => ({ p, copy }))) : []).map(({ p, copy }) => <ProductCard key={`${copy}-${p.amount}`} p={p} onAdd={() => add(p.amount)} />)}
           {list.length === 0 && <p className="text-muted-foreground">Nenhum produto encontrado.</p>}
         </div>
