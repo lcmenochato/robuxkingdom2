@@ -24,7 +24,7 @@ export function BonusWheel() {
   };
   return (
     <>
-      {!open && <button type="button" onClick={() => setOpen(true)} className="fixed bottom-5 right-5 z-40 rounded-full border-2 border-yellow-300 bg-zinc-950 px-5 py-3 font-bold text-yellow-300 shadow-xl">🎰 Roleta de bônus</button>}
+      {!open && <button type="button" onClick={() => setOpen(true)} className="fixed bottom-5 right-5 z-40 rounded-full border-2 border-yellow-300 bg-zinc-950 p-2 shadow-xl"><img src="https://i.postimg.cc/NfHHgfgd/1792169901114.png" alt="Abrir roleta de bônus" className="h-14 w-14 object-contain" /></button>}
       {open && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4" role="dialog" aria-modal="true" aria-label="Roleta de bônus">
         <div className="relative w-full max-w-md rounded-3xl border-2 border-yellow-400 bg-zinc-950 p-6 text-center text-white shadow-2xl">
           <button type="button" aria-label="Fechar" onClick={() => setOpen(false)} className="absolute right-4 top-3 text-3xl text-white">×</button>
@@ -38,7 +38,7 @@ export function BonusWheel() {
             <div className="absolute left-1/2 top-1/2 h-12 w-12 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-yellow-400 bg-zinc-950" />
           </div>
           {prize === null ? <button type="button" disabled={spinning} onClick={spin} className="w-full rounded-full bg-yellow-400 py-3 text-lg font-black text-black disabled:opacity-60">{spinning ? "GIRANDO..." : "GIRAR ROLETA"}</button> : <p className="text-xl font-black text-yellow-300">🎉 Você sorteou +{prize} Robux!</p>}
-          <p className="mt-4 rounded-xl border border-yellow-500/50 bg-yellow-400/10 p-3 text-sm font-bold text-yellow-100">Para liberar o bônus sorteado, é necessário realizar uma compra no site. O bônus não é creditado automaticamente.</p>
+          <p className="mt-4 rounded-xl border border-yellow-500/50 bg-yellow-400/10 p-3 text-sm font-bold text-yellow-100">Para liberar o bônus é necessário fazer uma compra no site!</p>
           <button type="button" onClick={() => { setOpen(false); document.querySelector("main")?.scrollIntoView({ behavior: "smooth" }); }} className="mt-4 w-full rounded-full border border-yellow-400 py-3 font-bold text-yellow-300">VER PRODUTOS</button>
         </div>
       </div>}
