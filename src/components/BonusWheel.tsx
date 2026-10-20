@@ -24,7 +24,7 @@ export function BonusWheel() {
     const delta = (desired - current + 360) % 360;
     setSpinning(true);
     setAngle(angle + 1800 + delta);
-    window.setTimeout(() => { setPrize(bonuses[index]); setSpinning(false); }, 4200);
+    window.setTimeout(() => { setPrize(bonuses[index]); sessionStorage.setItem("kr-bonus-robux", String(bonuses[index])); window.dispatchEvent(new CustomEvent("kr-bonus-won", { detail: bonuses[index] })); setSpinning(false); }, 4200);
   };
   return (
     <>
