@@ -134,6 +134,33 @@ export function Index() {
     if (!el || list.length === 0) return;
     el.scrollLeft = el.scrollWidth / 3;
   }, [q, view]);
+  useEffect(() => {
+    if (view !== "home" || list.length === 0) return;
+    const el = productScrollRef.current;
+    if (!el) return;
+    let frame = 0;
+    let previous = 0;
+    let pausedUntil = 0;
+    const pause = () => { pausedUntil = performance.now() + 3500; };
+    el.addEventListener("pointerdown", pause);
+    el.addEventListener("touchstart", pause, { passive: true });
+    el.addEventListener("wheel", pause, { passive: true });
+    const animate = (now: number) => {
+      if (previous && now - previous < 150 && now > pausedUntil && !document.hidden) {
+        el.scrollLeft += (now - previous) * 0.025;
+      }
+      previous = now;
+      frame = requestAnimationFrame(animate);
+    };
+    frame = requestAnimationFrame(animate);
+    return () => {
+      cancelAnimationFrame(frame);
+      el.removeEventListener("pointerdown", pause);
+      el.removeEventListener("touchstart", pause);
+      el.removeEventListener("wheel", pause);
+    };
+  }, [q, view]);
+
   const loopProductScroll = () => {
     const el = productScrollRef.current;
     if (!el || list.length === 0) return;
