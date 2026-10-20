@@ -7,13 +7,14 @@ export function BonusWheel() {
   const [angle, setAngle] = useState(0);
   const [prize, setPrize] = useState<number | null>(null);
   useEffect(() => {
-    if (!sessionStorage.getItem("kr-wheel-seen")) {
-      const timer = window.setTimeout(() => {
+    const showWheel = () => {
+      if (!sessionStorage.getItem("kr-wheel-seen")) {
         setOpen(true);
         sessionStorage.setItem("kr-wheel-seen", "1");
-      }, 5000);
-      return () => window.clearTimeout(timer);
-    }
+      }
+    };
+    window.addEventListener("kr-open-bonus-wheel", showWheel);
+    return () => window.removeEventListener("kr-open-bonus-wheel", showWheel);
   }, []);
   const spin = () => {
     if (spinning || prize !== null) return;
@@ -27,7 +28,6 @@ export function BonusWheel() {
   };
   return (
     <>
-      {!open && <button type="button" onClick={() => setOpen(true)} className="fixed bottom-5 right-5 z-40 rounded-full border-2 border-yellow-300 bg-zinc-950 p-2 shadow-xl"><img src="https://i.postimg.cc/NfHHgfgd/1792169901114.png" alt="Abrir roleta de bônus" className="h-14 w-14 object-contain" /></button>}
       {open && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4" role="dialog" aria-modal="true" aria-label="Roleta de bônus">
         <div className="relative w-full max-w-md rounded-3xl border-2 border-yellow-400 bg-zinc-950 p-6 text-center text-white shadow-2xl">
           <button type="button" aria-label="Fechar" onClick={() => setOpen(false)} className="absolute right-4 top-3 text-3xl text-white">×</button>
