@@ -1,0 +1,25 @@
+name: Atualizar banner inicial Kingdom Robux
+on:
+  push:
+    paths:
+      - '1000089547.png'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  banner:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Substituir banner inicial
+        run: |
+          test -s 1000089547.png
+          mkdir -p public/images
+          cp 1000089547.png public/images/banner.png
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/images/banner.png
+          if ! git diff --cached --quiet; then
+            git commit -m "Atualizar banner inicial ciano"
+            git push
+          fi
