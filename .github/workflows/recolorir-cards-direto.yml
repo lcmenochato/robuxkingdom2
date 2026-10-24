@@ -1,0 +1,51 @@
+name: Recolorir cards dourados para ciano
+on:
+  push:
+    paths:
+      - '.github/workflows/recolorir-cards-direto.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  recolorir:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instalar Pillow
+        run: python3 -m pip install --quiet pillow
+      - name: Recolorir somente as oito imagens
+        run: |
+          python3 - <<'PY'
+          from PIL import Image
+          import colorsys
+          from pathlib import Path
+          nomes=['700','1200','1700','2100','3600','4500','7000','10000']
+          for num in nomes:
+              path=Path(f'public/images/robux-{num}.jpg')
+              if not path.is_file(): raise FileNotFoundError(path)
+              im=Image.open(path).convert('RGB')
+              px=im.load()
+              for y in range(im.height):
+                  for x in range(im.width):
+                      r,g,b=px[x,y]
+                      h,s,v=colorsys.rgb_to_hsv(r/255,g/255,b/255)
+                      # Substituir amarelo, laranja e dourado saturados por ciano.
+                      # Manter branco, prata, preto e imagens multicoloridas intactos.
+                      if 0.055 <= h <= 0.175 and s >= 0.28 and v >= 0.17:
+                          blend=min(1.0,(s-0.28)/0.25)
+                          nh=(1-blend)*h+blend*0.50
+                          ns=max(s,0.65*blend)
+                          rr,gg,bb=colorsys.hsv_to_rgb(nh,ns,v)
+                          px[x,y]=(round(rr*255),round(gg*255),round(bb*255))
+              im.save(path,quality=94,subsampling=0)
+              print('Atualizado:',path)
+          PY
+      - name: Publicar apenas imagens
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/images/robux-*.jpg
+          if ! git diff --cached --quiet; then
+            git commit -m "Trocar dourado dos cards por ciano"
+            git push
+          fi
