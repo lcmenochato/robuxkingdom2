@@ -1,0 +1,37 @@
+name: Atualizar imagens ciano dos cards
+on:
+  push:
+    paths:
+      - '.github/workflows/cards-ciano.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copiar somente imagens dos cards do ZIP ciano
+        run: |
+          python3 - <<'PY'
+          import urllib.request, zipfile, io, pathlib
+          url = 'https://raw.githubusercontent.com/lcmenochato/robux2/16c9a0f5cc230b148e66688958f2fe41528b603c/robuxkingdom2-ciano.zip'
+          data = urllib.request.urlopen(url, timeout=120).read()
+          with zipfile.ZipFile(io.BytesIO(data)) as z:
+              files = [n for n in z.namelist() if n.startswith('robuxkingdom2-main/public/images/robux-') and n.lower().endswith(('.jpg','.png','.webp'))]
+              if len(files) < 8: raise RuntimeError('Imagens insuficientes no ZIP: '+str(files))
+              for n in files:
+                  dest = pathlib.Path('public/images') / pathlib.Path(n).name
+                  dest.parent.mkdir(parents=True,exist_ok=True)
+                  dest.write_bytes(z.read(n))
+                  print('Atualizado:',dest)
+          PY
+      - name: Publicar somente imagens
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/images/robux-*.jpg public/images/robux-*.png public/images/robux-*.webp 2>/dev/null || git add public/images/
+          if ! git diff --cached --quiet; then
+            git commit -m "Atualizar imagens dos cards para ciano"
+            git push
+          fi
