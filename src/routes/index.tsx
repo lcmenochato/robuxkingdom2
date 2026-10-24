@@ -32,14 +32,14 @@ export const Route = createFileRoute("/")({
 });
 
 const products = [
-  { amount: 700, price: 0, old: 0, img: "/images/robux-700.jpg", soldOut: true },
-  { amount: 1200, price: 19.9, old: 24, img: "/images/robux-1200.jpg" },
-  { amount: 1700, price: 24.9, old: 32, img: "/images/robux-1700.jpg" },
-  { amount: 2100, price: 29.9, old: 39, img: "/images/robux-2100.jpg" },
-  { amount: 3600, price: 44.9, old: 59, img: "/images/robux-3600.jpg" },
-  { amount: 4500, price: 59.9, old: 79, img: "/images/robux-4500.jpg" },
-  { amount: 7000, price: 89.9, old: 119, img: "/images/robux-7000.jpg" },
-  { amount: 10000, price: 119.9, old: 159, img: "/images/robux-10000.jpg" },
+  { amount: 700, price: 0, old: 0, img: "/images/robux-700.jpg?v=ciano-7377bbb", soldOut: true },
+  { amount: 1200, price: 19.9, old: 24, img: "/images/robux-1200.jpg?v=ciano-7377bbb" },
+  { amount: 1700, price: 24.9, old: 32, img: "/images/robux-1700.jpg?v=ciano-7377bbb" },
+  { amount: 2100, price: 29.9, old: 39, img: "/images/robux-2100.jpg?v=ciano-7377bbb" },
+  { amount: 3600, price: 44.9, old: 59, img: "/images/robux-3600.jpg?v=ciano-7377bbb" },
+  { amount: 4500, price: 59.9, old: 79, img: "/images/robux-4500.jpg?v=ciano-7377bbb" },
+  { amount: 7000, price: 89.9, old: 119, img: "/images/robux-7000.jpg?v=ciano-7377bbb" },
+  { amount: 10000, price: 119.9, old: 159, img: "/images/robux-10000.jpg?v=ciano-7377bbb" },
 ];
 const brl = (n: number) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
