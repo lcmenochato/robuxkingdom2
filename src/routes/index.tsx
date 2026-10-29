@@ -195,7 +195,7 @@ export function Index() {
       {view !== "home" ? (
         <Checkout view={view} setView={setView} items={items} setItems={setItems} onAdd={add} />
       ) : (<>
-      <img src={"/images/banner.png?v=ciano-0064956"} alt="Cansado de pagar caro em Robux? Aqui temos os melhores preços!" className="mx-auto w-full max-w-6xl" />
+      <img src={"/images/banner.png?v=prata-20261029"} alt="Cansado de pagar caro em Robux? Aqui temos os melhores preços!" className="mx-auto w-full max-w-6xl" />
 
       <main className="mx-auto max-w-6xl px-4 py-12">
         <h2 className="font-display text-4xl font-extrabold text-gold-grad">Promoções</h2>
