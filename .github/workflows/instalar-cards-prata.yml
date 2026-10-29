@@ -1,0 +1,41 @@
+name: Instalar cards prata Kingdom
+on:
+  push:
+    paths:
+      - 'kingdom_cards_prata_novo.zip'
+      - '.github/workflows/instalar-cards-prata.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  instalar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Extrair sete cards prata
+        run: |
+          python3 - <<'PY'
+          import zipfile, pathlib
+          nums = ('1200','1700','2100','3600','4500','7000','10000')
+          with zipfile.ZipFile('kingdom_cards_prata_novo.zip') as z:
+              files = {pathlib.PurePosixPath(n).name: n for n in z.namelist() if not n.endswith('/')}
+              for n in nums:
+                  name = f'robux-{n}.jpg'
+                  if name not in files:
+                      raise ValueError(f'Imagem ausente no ZIP: {name}')
+                  dest = pathlib.Path('public/images') / name
+                  dest.parent.mkdir(parents=True, exist_ok=True)
+                  dest.write_bytes(z.read(files[name]))
+                  print('Atualizado:', dest)
+          PY
+      - name: Salvar novas imagens
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/images/robux-*.jpg
+          if ! git diff --cached --quiet; then
+            git commit -m "Atualizar sete cards para versao prata"
+            git push
+          fi
