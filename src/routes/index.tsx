@@ -32,7 +32,7 @@ export const Route = createFileRoute("/")({
 });
 
 const products = [
-  { amount: 700, price: 0, old: 0, img: "/images/robux-700.jpg?v=prata-20261029", soldOut: true },
+  { amount: 700, price: 0, old: 0, img: "/images/robux-700.png?v=prata-esgotado-20261029", soldOut: true },
   { amount: 1200, price: 19.9, old: 24, img: "/images/robux-1200.jpg?v=prata-20261029" },
   { amount: 1700, price: 24.9, old: 32, img: "/images/robux-1700.jpg?v=prata-20261029" },
   { amount: 2100, price: 29.9, old: 39, img: "/images/robux-2100.jpg?v=prata-20261029" },
