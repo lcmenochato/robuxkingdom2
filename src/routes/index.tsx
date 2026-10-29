@@ -46,12 +46,12 @@ const brl = (n: number) => n.toLocaleString("pt-BR", { style: "currency", curren
 function ProductCard({ p, onAdd }: { p: (typeof products)[0]; onAdd: () => void }) {
   const soldOut = "soldOut" in p && p.soldOut;
   return (
-    <div className="w-64 shrink-0 snap-start overflow-hidden rounded-3xl border border-border bg-card shadow-gold">
+    <div className="w-48 sm:w-52 shrink-0 snap-start overflow-hidden rounded-3xl border border-border bg-card shadow-gold">
       <img src={p.img} alt={`${p.amount} Robux`} width={1024} height={1536} loading="lazy" className="aspect-[2/3] w-full object-cover" />
-      <div className="space-y-2 p-4">
-        <h3 className="font-display text-lg font-bold">{p.amount.toLocaleString("pt-BR")} ROBUX</h3>
+      <div className="space-y-1.5 p-3">
+        <h3 className="font-display text-base font-bold">{p.amount.toLocaleString("pt-BR")} ROBUX</h3>
         <div className="flex items-center gap-1 text-primary">
-          {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}
+          {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-3.5 w-3.5 fill-current" />)}
           <span className="ml-1 text-sm text-muted-foreground">({40 + p.amount % 97})</span>
         </div>
         <div className="flex items-baseline gap-2">
@@ -59,7 +59,7 @@ function ProductCard({ p, onAdd }: { p: (typeof products)[0]; onAdd: () => void 
             <span className="font-display text-xl font-extrabold text-muted-foreground">Esgotado</span>
           ) : (
             <>
-              <span className="font-display text-2xl font-extrabold text-primary">{brl(p.price)}</span>
+              <span className="font-display text-xl font-extrabold text-primary">{brl(p.price)}</span>
               <span className="text-sm text-muted-foreground line-through">{brl(p.old)}</span>
             </>
           )}
