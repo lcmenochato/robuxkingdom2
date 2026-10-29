@@ -1,0 +1,36 @@
+name: Instalar banner promocional prata
+on:
+  push:
+    paths:
+      - 'banner-promocional-prata.jpg'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  instalar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validar e substituir banner
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          source=Path('banner-promocional-prata.jpg')
+          data=source.read_bytes()
+          if len(data)<10000 or not data.startswith(b'\xff\xd8'):
+              raise ValueError('Banner invalido ou incompleto')
+          Path('public/images/banner-prata.jpg').write_bytes(data)
+          p=Path('src/routes/index.tsx')
+          s=p.read_text()
+          s=s.replace('banner-prata.jpg?v=prata-banner-20261029','banner-prata.jpg?v=promocional-prata-20261029')
+          p.write_text(s)
+          PY
+      - name: Publicar arquivos
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/images/banner-prata.jpg src/routes/index.tsx
+          if ! git diff --cached --quiet; then
+            git commit -m "Trocar banner por promocional prata"
+            git push
+          fi
