@@ -1,0 +1,43 @@
+name: Instalar banner prata JPG
+on:
+  push:
+    paths:
+      - 'banner-kingdom-prata.jpg'
+      - '.github/workflows/banner-prata-jpg.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  instalar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verificar e instalar banner
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('banner-kingdom-prata.jpg')
+          data=p.read_bytes()
+          if len(data)<10000 or not data.startswith(b'\xff\xd8'):
+              raise ValueError('Banner JPG incompleto. Arquivo nao sera publicado.')
+          dest=Path('public/images/banner-prata.jpg')
+          dest.parent.mkdir(parents=True,exist_ok=True)
+          dest.write_bytes(data)
+          page=Path('src/routes/index.tsx')
+          text=page.read_text()
+          marker='      <main className="mx-auto max-w-6xl px-4 py-12">'
+          banner='      <img src="/images/banner-prata.jpg?v=prata-banner-20261029" alt="Kingdom Robux prata" className="mx-auto block w-full max-w-6xl h-auto" />\n'
+          if banner not in text:
+              if marker not in text: raise ValueError('Posicao do banner nao encontrada')
+              text=text.replace(marker,banner+'\n'+marker,1)
+              page.write_text(text)
+          PY
+      - name: Salvar banner
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/images/banner-prata.jpg src/routes/index.tsx
+          if ! git diff --cached --quiet; then
+            git commit -m "Instalar banner prata Kingdom"
+            git push
+          fi
