@@ -198,3 +198,20 @@
  --sidebar-border: #536978;
  --sidebar-ring: #9aabbf;
 }
+
+/* Acabamento prata predominante: superfícies, botões, bordas e checkout */
+:root, .dark {
+ --gold:#c7d0da; --gold-deep:#8998a8;
+ --gradient-gold:linear-gradient(135deg,#f5f7fa 0%,#d7dfe7 25%,#9aaabd 55%,#e5eaf0 78%,#7f91a5 100%);
+ --gradient-bg:radial-gradient(ellipse at 50% 0%,#64778a 0%,#34495c 35%,#142637 75%,#0c1927 100%);
+ --shadow-gold:0 0 22px rgba(215,223,231,.35),0 0 3px rgba(255,255,255,.45);
+ --background:#142637; --card:#34495c; --popover:#34495c;
+ --primary:#d7dfe7; --primary-foreground:#101d2b;
+ --secondary:#8998a8; --muted:#536978; --accent:#9aabbf;
+ --border:#9aabbf; --input:#9aabbf; --ring:#e5eaf0;
+}
+.bg-card {background:linear-gradient(150deg,#536978,#304553 70%,#1a2c3c)}
+.border-border {border-color:rgba(215,223,231,.52)}
+.bg-muted {background-color:#536978}
+header {box-shadow:0 5px 24px rgba(220,230,240,.12)}
+button.bg-gold, .bg-gold {background:var(--gradient-gold)}
