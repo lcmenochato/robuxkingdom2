@@ -164,3 +164,37 @@
 @utility shadow-gold { box-shadow: var(--shadow-gold); }
 @keyframes marquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }
 @utility animate-marquee { animation: marquee 20s linear infinite; }
+
+/* Kingdom Robux — paleta prata/azul aço (29-10-2026) */
+:root, .dark {
+ --gold: #9aabbf;
+ --gold-deep: #536978;
+ --gradient-gold: linear-gradient(135deg,#d6e0ed 0%,#9aabbf 48%,#697b90 100%);
+ --gradient-bg: linear-gradient(145deg,#071a2b 0%,#102234 52%,#304553 100%);
+ --shadow-gold: 0 0 30px -8px rgba(154,171,191,.55);
+ --background: #071a2b;
+ --foreground: #e8edf3;
+ --card: #102234;
+ --card-foreground: #e8edf3;
+ --popover: #102234;
+ --popover-foreground: #e8edf3;
+ --primary: #9aabbf;
+ --primary-foreground: #071a2b;
+ --secondary: #536978;
+ --secondary-foreground: #f1f5f9;
+ --muted: #304553;
+ --muted-foreground: #b5c1cf;
+ --accent: #697b90;
+ --accent-foreground: #ffffff;
+ --border: #536978;
+ --input: #536978;
+ --ring: #9aabbf;
+ --sidebar: #102234;
+ --sidebar-foreground: #e8edf3;
+ --sidebar-primary: #9aabbf;
+ --sidebar-primary-foreground: #071a2b;
+ --sidebar-accent: #304553;
+ --sidebar-accent-foreground: #e8edf3;
+ --sidebar-border: #536978;
+ --sidebar-ring: #9aabbf;
+}
