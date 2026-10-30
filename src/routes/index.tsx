@@ -196,7 +196,7 @@ export function Index() {
         <Checkout view={view} setView={setView} items={items} setItems={setItems} onAdd={add} />
       ) : (<>
 
-      <img src="/images/banner-prata.jpg?v=prata-banner-20261029" alt="Kingdom Robux prata" className="mx-auto block w-full max-w-6xl h-auto" />
+      <img src="/images/banner-prata.jpg?v=promocional-prata-20261029" alt="Kingdom Robux prata" className="mx-auto block w-full max-w-6xl h-auto" />
 
       <main className="mx-auto max-w-6xl px-4 py-12">
         <h2 className="font-display text-4xl font-extrabold text-gold-grad">Promoções</h2>
