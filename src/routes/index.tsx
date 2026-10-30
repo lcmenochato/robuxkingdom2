@@ -123,6 +123,7 @@ function Faq({ q, a }: { q: string; a: string }) {
 export function Index() {
   const [items, setItems] = useState<Record<number, number>>({});
   const [view, setView] = useState<"home" | "checkout" | "pix">("home");
+  const [menuOpen, setMenuOpen] = useState(false);
   const cart = Object.values(items).reduce((a, b) => a + b, 0);
   const add = (amount: number) => { setItems((it) => ({ ...it, [amount]: (it[amount] || 0) + 1 })); setView("checkout"); window.scrollTo(0, 0); };
   const [q, setQ] = useState("");
@@ -177,9 +178,22 @@ export function Index() {
         </div>
       </div>
 
+      {menuOpen && (
+        <div className="fixed inset-0 z-[100] bg-black/95 text-white" role="dialog" aria-modal="true" aria-label="Menu de navegação">
+          <div className="flex items-center justify-between border-b border-white/20 px-7 py-6">
+            <span className="font-display text-lg font-bold tracking-wide text-slate-200">KINGDOM ROBUX</span>
+            <button type="button" onClick={() => setMenuOpen(false)} aria-label="Fechar menu" className="rounded-2xl border border-white/20 p-4 text-white"><span className="text-3xl leading-none">×</span></button>
+          </div>
+          <nav className="flex flex-col gap-0 px-8 pt-10 text-2xl font-semibold">
+            <button type="button" className="py-7 text-left" onClick={() => { setMenuOpen(false); setView("home"); window.scrollTo(0,0); }}>Início</button>
+            <a className="py-7" href="mailto:suporte@kingdombuxoficial.com" onClick={() => setMenuOpen(false)}>Suporte</a>
+            <button type="button" className="py-7 text-left" onClick={() => { setMenuOpen(false); document.getElementById("politicas-kingdom")?.scrollIntoView({ behavior: "smooth" }); }}>Termos</button>
+          </nav>
+        </div>
+      )}
       <header className="sticky top-0 z-10 border-b-2 border-primary/60 bg-background/90 px-4 py-4 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
-          <button aria-label="Menu"><Menu className="h-7 w-7" /></button>
+          <button type="button" aria-label="Abrir menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}><Menu className="h-7 w-7" /></button>
           <button onClick={() => setView("home")} aria-label="Início" className="flex min-w-0 items-center justify-center"><img src="https://i.postimg.cc/FKjWs8L5/1793321103487.png" alt="Kingdom Robux prata" className="h-16 w-auto max-w-[230px] object-contain sm:h-20" /></button>
           <button onClick={() => setView("checkout")} aria-label="Carrinho" className="relative grid h-12 w-12 place-items-center rounded-full bg-gold text-primary-foreground shadow-gold">
             <ShoppingCart className="h-5 w-5" />
@@ -255,7 +269,7 @@ export function Index() {
             <p className="mt-3 flex items-center gap-2 text-muted-foreground"><MessageCircle className="h-4 w-4" /> Discord</p>
           </div>
           <div>
-            <h4 className="font-bold tracking-widest text-primary">POLÍTICAS</h4>
+            <h4 id="politicas-kingdom" className="font-bold tracking-widest text-primary">POLÍTICAS</h4>
             <ul className="mt-4 space-y-3 text-muted-foreground">
               <li>Sobre nós</li><li>Termos de serviço</li><li>Política de reembolso</li>
             </ul>
