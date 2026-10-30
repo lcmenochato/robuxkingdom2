@@ -170,10 +170,10 @@ function DemoPurchasePopup() {
       setCurrent(position % demoPurchases.length);
       position += 1;
       setVisible(true);
-      hideTimer = setTimeout(() => setVisible(false), 4700);
+      hideTimer = setTimeout(() => setVisible(false), 5000);
     };
-    const first = setTimeout(show, 9000);
-    const interval = setInterval(show, 17000);
+    const first = setTimeout(show, 5000);
+    const interval = setInterval(show, 6000);
     return () => { clearTimeout(first); clearInterval(interval); if (hideTimer) clearTimeout(hideTimer); };
   }, []);
   const item = demoPurchases[current];
