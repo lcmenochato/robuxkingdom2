@@ -472,20 +472,20 @@ function Checkout({ view, setView, items, setItems, onAdd }: { view: "checkout" 
 
   return (
     <main className="mx-auto max-w-xl space-y-6 px-4 py-8">
-      <nav aria-label="Etapas da compra" className="flex items-center justify-between gap-2 rounded-2xl border border-border bg-card px-3 py-5 shadow-gold sm:px-5">
-        <div className="flex shrink-0 items-center gap-2 text-xs font-semibold sm:text-sm">
-          <span className="grid h-9 w-9 place-items-center rounded-full bg-gold text-primary-foreground"><Check className="h-5 w-5" /></span>
+      <nav aria-label="Etapas da compra" className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1.2fr)_auto_minmax(0,1.15fr)] items-center gap-1 rounded-2xl border border-border bg-card px-2 py-5 shadow-gold sm:gap-3 sm:px-5">
+        <div className="flex min-w-0 items-center justify-center gap-1 text-[10px] font-semibold sm:gap-2 sm:text-sm">
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gold text-primary-foreground sm:h-9 sm:w-9"><Check className="h-4 w-4 sm:h-5 sm:w-5" /></span>
           <span>Pacote</span>
         </div>
-        <span className="h-px min-w-3 flex-1 bg-border" />
-        <div className="flex shrink-0 items-center gap-2 text-xs font-bold sm:text-sm" aria-current="step">
-          <span className="grid h-9 w-9 place-items-center rounded-full border border-gold bg-gold/15 text-gold">2</span>
+        <span className="h-px w-2 bg-border sm:w-5" />
+        <div className="flex min-w-0 items-center justify-center gap-1 text-[10px] font-bold sm:gap-2 sm:text-sm" aria-current="step">
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-gold bg-gold/15 text-gold sm:h-9 sm:w-9">2</span>
           <span>Seus dados</span>
         </div>
-        <span className="h-px min-w-3 flex-1 bg-border" />
-        <div className="flex shrink-0 items-center gap-2 text-xs font-semibold text-muted-foreground sm:text-sm">
-          <span className="grid h-9 w-9 place-items-center rounded-full border border-border">3</span>
-          <span>Pagamento</span>
+        <span className="h-px w-2 bg-border sm:w-5" />
+        <div className="flex min-w-0 items-center justify-center gap-1 text-[10px] font-semibold text-muted-foreground sm:gap-2 sm:text-sm">
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-border sm:h-9 sm:w-9">3</span>
+          <span className="min-w-0 break-words">Pagamento</span>
         </div>
       </nav>
       <div className={card}>
@@ -525,7 +525,7 @@ function Checkout({ view, setView, items, setItems, onAdd }: { view: "checkout" 
         <div className="mt-6 space-y-4">
           <h3 className="text-lg font-bold">Forma de pagamento</h3>
           <div className="flex items-center gap-4 rounded-2xl border border-slate-400/60 bg-muted/70 p-4">
-            <img src="https://i.postimg.cc/KYQDpMks/WA-1793327789295.jpg" alt="Ícone PIX" className="h-14 w-14 shrink-0 rounded-xl object-contain" />
+            <img src="https://i.postimg.cc/7PSMjd2t/1793328092385.png" alt="Ícone PIX" className="h-14 w-14 shrink-0 rounded-xl object-contain" />
             <div>
               <p className="font-bold">Pagamento instantâneo via PIX</p>
               <p className="mt-1 text-sm text-muted-foreground">QR Code e Pix Copia e Cola gerados na hora.</p>
