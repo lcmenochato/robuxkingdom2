@@ -153,6 +153,45 @@ function SupportPage() {
   );
 }
 
+const demoPurchases = [
+  { name: "Julia", amount: 4500, image: "/images/robux-4500.jpg?v=prata-20261029" },
+  { name: "Gustavo", amount: 2100, image: "/images/robux-2100.jpg?v=prata-20261029" },
+  { name: "Roberto", amount: 1200, image: "/images/robux-1200.jpg?v=prata-20261029" },
+  { name: "Ana", amount: 1700, image: "/images/robux-1700.jpg?v=prata-20261029" },
+];
+function DemoPurchasePopup() {
+  const [current, setCurrent] = useState(-1);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let position = 0;
+    let hideTimer: ReturnType<typeof setTimeout> | undefined;
+    const show = () => {
+      setCurrent(position % demoPurchases.length);
+      position += 1;
+      setVisible(true);
+      hideTimer = setTimeout(() => setVisible(false), 4700);
+    };
+    const first = setTimeout(show, 9000);
+    const interval = setInterval(show, 17000);
+    return () => { clearTimeout(first); clearInterval(interval); if (hideTimer) clearTimeout(hideTimer); };
+  }, []);
+  const item = demoPurchases[current];
+  if (!item) return null;
+  return (
+    <aside aria-label="Demonstração de notificação" className={`pointer-events-none fixed bottom-5 left-3 z-40 w-[min(340px,calc(100vw-24px))] transition-all duration-700 ease-out ${visible ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}`}>
+      <div className="flex items-center gap-3 rounded-2xl border border-slate-500/50 bg-[#111214]/95 p-3 text-white shadow-2xl backdrop-blur">
+        <img src={item.image} alt="" className="h-20 w-14 shrink-0 rounded-lg object-cover" />
+        <div className="min-w-0">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-300">EXEMPLO DE NOTIFICAÇÃO</p>
+          <p className="mt-1 text-base font-bold">{item.name} · {item.amount.toLocaleString("pt-BR")} Robux</p>
+          <p className="mt-1 text-xs text-slate-400">Simulação visual — não é uma compra real</p>
+        </div>
+      </div>
+    </aside>
+  );
+}
+
 export function Index() {
   const [items, setItems] = useState<Record<number, number>>({});
   const [view, setView] = useState<"home" | "checkout" | "pix" | "support">("home");
@@ -205,6 +244,7 @@ export function Index() {
 
   return (
     <div className="min-h-screen bg-kingdom font-sans">
+      {view === "home" && <DemoPurchasePopup />}
       <div className="overflow-hidden bg-gold py-2 text-primary-foreground">
         <div className="flex w-max animate-marquee whitespace-pre font-display text-sm font-extrabold">
           {marquee.repeat(6)}
