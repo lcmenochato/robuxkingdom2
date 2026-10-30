@@ -208,14 +208,14 @@ export function Index() {
 
         <section className="mt-16 text-center">
           <h2 className="font-display text-3xl font-extrabold">
-            SOMOS QUASE 146 MIL <span className="text-gold-grad">MEMBROS NO DISCORD!</span>
+            Somos quase <span className="text-gold-grad">200 mil seguidores</span>
           </h2>
           <div className="mx-auto mt-3 h-1 w-64 rounded-full bg-gold" />
           <p className="mx-auto mt-5 max-w-md text-lg text-muted-foreground">
             Venha fazer parte da nossa comunidade. O que você está esperando?
           </p>
           <div className="mx-auto mt-8 max-w-md overflow-hidden rounded-2xl border-2 border-primary">
-            <img src="/images/discord.jpg?v=20261016b" alt="Comunidade Robux Kingdom no Discord" className="block h-auto w-full" loading="lazy" />
+            <img src="https://i.postimg.cc/DZpq2P56/file-000000007ec0820e8028a62b890adbbb.png" alt="Perfil Kingdom Robux" className="block h-auto w-full" loading="lazy" />
           </div>
         </section>
 
