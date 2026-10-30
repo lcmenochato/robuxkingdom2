@@ -79,7 +79,7 @@ function ProductCard({ p, onAdd }: { p: (typeof products)[0]; onAdd: () => void 
 }
 
 function Logo({ big }: { big?: boolean }) {
-  return <img src={"/images/logo.png"} alt="Robux Kingdom" className={big ? "w-72 max-w-full" : "h-14 w-auto"} />;
+  return <img src="https://i.postimg.cc/rw2wtRHX/1793307418253.png" alt="Kingdom Robux" className={big ? "w-72 max-w-full h-auto object-contain" : "h-14 w-auto max-w-[220px] object-contain"} />;
 }
 
 const reviews: { name: string; text: string; img?: string }[] = [
