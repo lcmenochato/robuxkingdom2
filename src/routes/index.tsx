@@ -187,13 +187,13 @@ export function Index() {
             {cart > 0 && <span className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center rounded-full bg-foreground text-xs font-bold text-background">{cart}</span>}
           </button>
         </div>
-        {menuOpen && (
-          <nav className="mx-auto mt-4 flex max-w-6xl flex-col overflow-hidden rounded-2xl border border-white/20 bg-[#25282d] text-white shadow-xl" aria-label="Menu de navegação">
+        <div className={`mx-auto max-w-6xl overflow-hidden transition-[max-height,opacity,margin] duration-500 ease-in-out ${menuOpen ? "mt-4 max-h-64 opacity-100" : "mt-0 max-h-0 opacity-0 pointer-events-none"}`} aria-hidden={!menuOpen}>
+          <nav className="flex flex-col overflow-hidden rounded-2xl border border-white/20 bg-[#25282d] text-white shadow-xl" aria-label="Menu de navegação">
             <button type="button" className="border-b border-white/10 px-6 py-4 text-left font-semibold hover:bg-white/10" onClick={() => { setMenuOpen(false); setView("home"); window.scrollTo(0, 0); }}>Início</button>
             <a href="mailto:suporte@kingdombuxoficial.com" className="border-b border-white/10 px-6 py-4 font-semibold hover:bg-white/10" onClick={() => setMenuOpen(false)}>Suporte</a>
             <button type="button" className="px-6 py-4 text-left font-semibold hover:bg-white/10" onClick={() => { setMenuOpen(false); document.getElementById("politicas-kingdom")?.scrollIntoView({ behavior: "smooth" }); }}>Termos</button>
           </nav>
-        )}
+        </div>
         <div className="mx-auto mt-4 flex max-w-6xl items-center rounded-full border border-border bg-muted pl-5 pr-1.5">
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar produtos..." className="flex-1 bg-transparent py-3 outline-none placeholder:text-muted-foreground" />
           <span className="grid h-10 w-10 place-items-center rounded-full bg-gold text-primary-foreground"><Search className="h-5 w-5" /></span>
