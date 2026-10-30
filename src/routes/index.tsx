@@ -178,28 +178,22 @@ export function Index() {
         </div>
       </div>
 
-      {menuOpen && (
-        <div className="fixed inset-0 z-[100] bg-black/95 text-white" role="dialog" aria-modal="true" aria-label="Menu de navegação">
-          <div className="flex items-center justify-between border-b border-white/20 px-7 py-6">
-            <span className="font-display text-lg font-bold tracking-wide text-slate-200">KINGDOM ROBUX</span>
-            <button type="button" onClick={() => setMenuOpen(false)} aria-label="Fechar menu" className="rounded-2xl border border-white/20 p-4 text-white"><span className="text-3xl leading-none">×</span></button>
-          </div>
-          <nav className="flex flex-col gap-0 px-8 pt-10 text-2xl font-semibold">
-            <button type="button" className="py-7 text-left" onClick={() => { setMenuOpen(false); setView("home"); window.scrollTo(0,0); }}>Início</button>
-            <a className="py-7" href="mailto:suporte@kingdombuxoficial.com" onClick={() => setMenuOpen(false)}>Suporte</a>
-            <button type="button" className="py-7 text-left" onClick={() => { setMenuOpen(false); document.getElementById("politicas-kingdom")?.scrollIntoView({ behavior: "smooth" }); }}>Termos</button>
-          </nav>
-        </div>
-      )}
       <header className="sticky top-0 z-10 border-b-2 border-primary/60 bg-background/90 px-4 py-4 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
-          <button type="button" aria-label="Abrir menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}><Menu className="h-7 w-7" /></button>
+          <button type="button" aria-label={menuOpen ? "Fechar menu" : "Abrir menu"} aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)}><Menu className="h-7 w-7" /></button>
           <button onClick={() => setView("home")} aria-label="Início" className="flex min-w-0 items-center justify-center"><img src="https://i.postimg.cc/FKjWs8L5/1793321103487.png" alt="Kingdom Robux prata" className="h-16 w-auto max-w-[230px] object-contain sm:h-20" /></button>
           <button onClick={() => setView("checkout")} aria-label="Carrinho" className="relative grid h-12 w-12 place-items-center rounded-full bg-gold text-primary-foreground shadow-gold">
             <ShoppingCart className="h-5 w-5" />
             {cart > 0 && <span className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center rounded-full bg-foreground text-xs font-bold text-background">{cart}</span>}
           </button>
         </div>
+        {menuOpen && (
+          <nav className="mx-auto mt-4 flex max-w-6xl flex-col overflow-hidden rounded-2xl border border-white/20 bg-[#25282d] text-white shadow-xl" aria-label="Menu de navegação">
+            <button type="button" className="border-b border-white/10 px-6 py-4 text-left font-semibold hover:bg-white/10" onClick={() => { setMenuOpen(false); setView("home"); window.scrollTo(0, 0); }}>Início</button>
+            <a href="mailto:suporte@kingdombuxoficial.com" className="border-b border-white/10 px-6 py-4 font-semibold hover:bg-white/10" onClick={() => setMenuOpen(false)}>Suporte</a>
+            <button type="button" className="px-6 py-4 text-left font-semibold hover:bg-white/10" onClick={() => { setMenuOpen(false); document.getElementById("politicas-kingdom")?.scrollIntoView({ behavior: "smooth" }); }}>Termos</button>
+          </nav>
+        )}
         <div className="mx-auto mt-4 flex max-w-6xl items-center rounded-full border border-border bg-muted pl-5 pr-1.5">
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar produtos..." className="flex-1 bg-transparent py-3 outline-none placeholder:text-muted-foreground" />
           <span className="grid h-10 w-10 place-items-center rounded-full bg-gold text-primary-foreground"><Search className="h-5 w-5" /></span>
