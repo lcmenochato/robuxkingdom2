@@ -472,6 +472,22 @@ function Checkout({ view, setView, items, setItems, onAdd }: { view: "checkout" 
 
   return (
     <main className="mx-auto max-w-xl space-y-6 px-4 py-8">
+      <nav aria-label="Etapas da compra" className="flex items-center justify-between gap-2 rounded-2xl border border-border bg-card px-3 py-5 shadow-gold sm:px-5">
+        <div className="flex shrink-0 items-center gap-2 text-xs font-semibold sm:text-sm">
+          <span className="grid h-9 w-9 place-items-center rounded-full bg-gold text-primary-foreground"><Check className="h-5 w-5" /></span>
+          <span>Pacote</span>
+        </div>
+        <span className="h-px min-w-3 flex-1 bg-border" />
+        <div className="flex shrink-0 items-center gap-2 text-xs font-bold sm:text-sm" aria-current="step">
+          <span className="grid h-9 w-9 place-items-center rounded-full border border-gold bg-gold/15 text-gold">2</span>
+          <span>Seus dados</span>
+        </div>
+        <span className="h-px min-w-3 flex-1 bg-border" />
+        <div className="flex shrink-0 items-center gap-2 text-xs font-semibold text-muted-foreground sm:text-sm">
+          <span className="grid h-9 w-9 place-items-center rounded-full border border-border">3</span>
+          <span>Pagamento</span>
+        </div>
+      </nav>
       <div className={card}>
         <h2 className="flex items-center gap-3 font-display text-2xl font-extrabold"><User className="h-6 w-6" /> Seus Dados</h2>
         <label className="mt-5 block text-muted-foreground">Email *</label>
