@@ -158,6 +158,12 @@ const demoPurchases = [
   { name: "Gustavo", amount: 2100, image: "/images/robux-2100.jpg?v=prata-20261029" },
   { name: "Roberto", amount: 1200, image: "/images/robux-1200.jpg?v=prata-20261029" },
   { name: "Ana", amount: 1700, image: "/images/robux-1700.jpg?v=prata-20261029" },
+  { name: "Lucas", amount: 3600, image: "/images/robux-3600.jpg?v=prata-20261029" },
+  { name: "Mariana", amount: 7000, image: "/images/robux-7000.jpg?v=prata-20261029" },
+  { name: "Pedro", amount: 10000, image: "/images/robux-10000.jpg?v=prata-20261029" },
+  { name: "Beatriz", amount: 4500, image: "/images/robux-4500.jpg?v=prata-20261029" },
+  { name: "Rafael", amount: 1200, image: "/images/robux-1200.jpg?v=prata-20261029" },
+  { name: "Camila", amount: 2100, image: "/images/robux-2100.jpg?v=prata-20261029" },
 ];
 function DemoPurchasePopup() {
   const [current, setCurrent] = useState(-1);
@@ -187,7 +193,7 @@ function DemoPurchasePopup() {
         <img src={item.image} alt="" className="h-20 w-14 shrink-0 rounded-lg object-cover" />
         <div className="min-w-0">
           <p className="mt-1 text-base font-bold">{item.name} · {item.amount.toLocaleString("pt-BR")} Robux</p>
-          <p className="mt-1 text-xs text-slate-400">Simulação visual — não é uma compra real</p>
+          <p className="mt-1 text-xs text-slate-400">Demonstração</p>
         </div>
       </div>
     </aside>
