@@ -361,6 +361,7 @@ type Items = Record<number, number>;
 function Checkout({ view, setView, items, setItems, onAdd }: { view: "checkout" | "pix"; setView: (v: "home" | "checkout" | "pix") => void; items: Items; setItems: (f: (i: Items) => Items) => void; onAdd: (a: number) => void }) {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [loadingPix, setLoadingPix] = useState(false);
   const [pixError, setPixError] = useState("");
   const [payment, setPayment] = useState<{id:string;code:string;qr:string;amount:number}|null>(null);
@@ -374,7 +375,7 @@ function Checkout({ view, setView, items, setItems, onAdd }: { view: "checkout" 
   const setQty = (a: number, d: number) => setItems((it) => { const n = { ...it, [a]: (it[a] || 0) + d }; if ((n[a] ?? 0) <= 0) delete n[a]; return n; });
   const api = "https://flevopay-api.lcfferr57.workers.dev";
   async function generatePix() {
-    if (loadingPix || !username.trim() || !lines.length) return;
+    if (loadingPix || !username.trim() || !lines.length || !acceptedTerms) return;
     setLoadingPix(true);
     setPixError("");
     try {
@@ -505,7 +506,21 @@ function Checkout({ view, setView, items, setItems, onAdd }: { view: "checkout" 
           <button onClick={() => { const ok = coupon.trim().toUpperCase() === "ROBUXBARATO"; setDiscount(ok ? 0.1 : 0); setMsg(ok ? "Cupom aplicado: 10% OFF!" : "Cupom inválido"); }} className="rounded-xl bg-gold px-5 font-bold text-primary-foreground">Aplicar</button>
         </div>
         {msg && <p className="mt-2 text-sm text-primary">{msg}</p>}
-        <button disabled={loadingPix || !lines.length || !username.trim() || !/\S+@\S+\.\S+/.test(email)} onClick={generatePix} className="mt-5 w-full rounded-full bg-gold py-4 font-display text-lg font-extrabold text-primary-foreground disabled:opacity-50">{loadingPix ? "GERANDO PIX..." : "FINALIZAR COMPRA"}</button>
+        <div className="mt-6 space-y-4">
+          <h3 className="text-lg font-bold">Forma de pagamento</h3>
+          <div className="flex items-center gap-4 rounded-2xl border border-slate-400/60 bg-muted/70 p-4">
+            <img src="https://i.postimg.cc/KYQDpMks/WA-1793327789295.jpg" alt="Ícone PIX" className="h-14 w-14 shrink-0 rounded-xl object-contain" />
+            <div>
+              <p className="font-bold">Pagamento instantâneo via PIX</p>
+              <p className="mt-1 text-sm text-muted-foreground">QR Code e Pix Copia e Cola gerados na hora.</p>
+            </div>
+          </div>
+          <label className="flex cursor-pointer items-start gap-3 text-sm text-muted-foreground">
+            <input type="checkbox" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} className="mt-1 h-5 w-5 shrink-0 accent-slate-400" />
+            <span>Li e aceito os <a href="/#politicas-kingdom" target="_blank" rel="noopener noreferrer" className="text-foreground underline">termos</a> e a <a href="/#politicas-kingdom" target="_blank" rel="noopener noreferrer" className="text-foreground underline">política de privacidade</a>.</span>
+          </label>
+        </div>
+        <button disabled={!acceptedTerms || loadingPix || !lines.length || !username.trim() || !/\S+@\S+\.\S+/.test(email)} onClick={generatePix} className="mt-5 w-full rounded-full bg-gold py-4 font-display text-lg font-extrabold text-primary-foreground disabled:opacity-50">{loadingPix ? "GERANDO PIX..." : "FINALIZAR COMPRA"}</button>
         {pixError && <p role="alert" className="mt-3 text-center text-destructive">{pixError}</p>}
         {lines.length > 0 && !/\S+@\S+\.\S+/.test(email) && <p className="mt-2 text-center text-sm text-muted-foreground">Preencha seu email para continuar</p>}
       </div>
