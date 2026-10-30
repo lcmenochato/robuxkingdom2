@@ -186,7 +186,6 @@ function DemoPurchasePopup() {
       <div className="flex items-center gap-3 rounded-2xl border border-slate-500/50 bg-[#111214]/95 p-3 text-white shadow-2xl backdrop-blur">
         <img src={item.image} alt="" className="h-20 w-14 shrink-0 rounded-lg object-cover" />
         <div className="min-w-0">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-300">EXEMPLO DE NOTIFICAÇÃO</p>
           <p className="mt-1 text-base font-bold">{item.name} · {item.amount.toLocaleString("pt-BR")} Robux</p>
           <p className="mt-1 text-xs text-slate-400">Simulação visual — não é uma compra real</p>
         </div>
