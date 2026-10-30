@@ -120,9 +120,42 @@ function Faq({ q, a }: { q: string; a: string }) {
   );
 }
 
+
+function SupportPage() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [order, setOrder] = useState("");
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+  const field = "mt-2 w-full rounded-2xl border border-white/10 bg-[#141414] px-4 py-4 text-white outline-none transition-colors focus:border-slate-400";
+  const submit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const body = `Nome: ${name}\nE-mail: ${email}\nCódigo do pedido: ${order || "Não informado"}\nAssunto: ${subject}\n\nMensagem:\n${message}`;
+    window.location.href = `mailto:suporte@kingdombuxoficial.com?subject=${encodeURIComponent("Suporte Kingdom Robux - " + subject)}&body=${encodeURIComponent(body)}`;
+  };
+  return (
+    <main className="min-h-[75vh] bg-[#0b0b0c] px-5 pb-24 pt-10 text-white">
+      <div className="mx-auto max-w-xl">
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400">ATENDIMENTO</p>
+        <h1 className="mt-3 text-4xl font-semibold">Abrir ticket</h1>
+        <p className="mt-5 leading-7 text-slate-400">Preencha os dados abaixo para entrar em contato com nossa equipe de suporte.</p>
+        <form onSubmit={submit} className="mt-9 space-y-6 rounded-[2rem] border border-white/10 bg-[#161616] p-6 sm:p-9">
+          <label className="block font-semibold">Nome<input className={field} value={name} onChange={e => setName(e.target.value)} required autoComplete="name" /></label>
+          <label className="block font-semibold">E-mail<input className={field} type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" /></label>
+          <label className="block font-semibold">Código do pedido (opcional)<input className={field} value={order} onChange={e => setOrder(e.target.value)} placeholder="KING-..." /></label>
+          <label className="block font-semibold">Assunto<input className={field} value={subject} onChange={e => setSubject(e.target.value)} required /></label>
+          <label className="block font-semibold">Mensagem<textarea className={field + " min-h-40 resize-y"} value={message} onChange={e => setMessage(e.target.value)} required rows={5} /></label>
+          <button type="submit" className="w-full rounded-2xl bg-gradient-to-r from-slate-300 via-white to-slate-400 px-6 py-4 text-lg font-bold text-[#17191c]">Enviar mensagem</button>
+          <p className="text-center text-xs leading-5 text-slate-400">O botão abre seu aplicativo de e-mail com a mensagem preenchida. O envio é concluído no aplicativo de e-mail.</p>
+        </form>
+      </div>
+    </main>
+  );
+}
+
 export function Index() {
   const [items, setItems] = useState<Record<number, number>>({});
-  const [view, setView] = useState<"home" | "checkout" | "pix">("home");
+  const [view, setView] = useState<"home" | "checkout" | "pix" | "support">("home");
   const [menuOpen, setMenuOpen] = useState(false);
   const cart = Object.values(items).reduce((a, b) => a + b, 0);
   const add = (amount: number) => { setItems((it) => ({ ...it, [amount]: (it[amount] || 0) + 1 })); setView("checkout"); window.scrollTo(0, 0); };
@@ -190,7 +223,7 @@ export function Index() {
         <div className={`mx-auto max-w-6xl overflow-hidden transition-[max-height,opacity,margin] duration-500 ease-in-out ${menuOpen ? "mt-4 max-h-64 opacity-100" : "mt-0 max-h-0 opacity-0 pointer-events-none"}`} aria-hidden={!menuOpen}>
           <nav className="flex flex-col overflow-hidden rounded-2xl border border-white/20 bg-[#25282d] text-white shadow-xl" aria-label="Menu de navegação">
             <button type="button" className="border-b border-white/10 px-6 py-4 text-left font-semibold hover:bg-white/10" onClick={() => { setMenuOpen(false); setView("home"); window.scrollTo(0, 0); }}>Início</button>
-            <a href="mailto:suporte@kingdombuxoficial.com" className="border-b border-white/10 px-6 py-4 font-semibold hover:bg-white/10" onClick={() => setMenuOpen(false)}>Suporte</a>
+            <button type="button" className="border-b border-white/10 px-6 py-4 text-left font-semibold hover:bg-white/10" onClick={() => { setMenuOpen(false); setView("support"); window.scrollTo(0, 0); }}>Suporte</button>
             <button type="button" className="px-6 py-4 text-left font-semibold hover:bg-white/10" onClick={() => { setMenuOpen(false); document.getElementById("politicas-kingdom")?.scrollIntoView({ behavior: "smooth" }); }}>Termos</button>
           </nav>
         </div>
@@ -200,7 +233,9 @@ export function Index() {
         </div>
       </header>
 
-      {view !== "home" ? (
+      {view === "support" ? (
+        <SupportPage />
+      ) : view !== "home" ? (
         <Checkout view={view} setView={setView} items={items} setItems={setItems} onAdd={add} />
       ) : (<>
 
