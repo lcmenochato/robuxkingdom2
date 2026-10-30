@@ -172,14 +172,17 @@ function DemoPurchasePopup() {
       setVisible(true);
       hideTimer = setTimeout(() => setVisible(false), 5000);
     };
-    const first = setTimeout(show, 5000);
-    const interval = setInterval(show, 6000);
-    return () => { clearTimeout(first); clearInterval(interval); if (hideTimer) clearTimeout(hideTimer); };
+    let interval: ReturnType<typeof setInterval> | undefined;
+    const first = setTimeout(() => {
+      show();
+      interval = setInterval(show, 6000);
+    }, 5000);
+    return () => { clearTimeout(first); if (interval) clearInterval(interval); if (hideTimer) clearTimeout(hideTimer); };
   }, []);
   const item = demoPurchases[current];
   if (!item) return null;
   return (
-    <aside aria-label="Demonstração de notificação" className={`pointer-events-none fixed bottom-5 left-3 z-40 w-[min(340px,calc(100vw-24px))] transition-all duration-700 ease-out ${visible ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}`}>
+    <aside aria-label="Demonstração de notificação" className={`pointer-events-none fixed bottom-5 left-3 z-40 w-[min(340px,calc(100vw-24px))] transition-all duration-1000 ease-in-out ${visible ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"}`}>
       <div className="flex items-center gap-3 rounded-2xl border border-slate-500/50 bg-[#111214]/95 p-3 text-white shadow-2xl backdrop-blur">
         <img src={item.image} alt="" className="h-20 w-14 shrink-0 rounded-lg object-cover" />
         <div className="min-w-0">
